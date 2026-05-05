@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sokuvo V2 — Interaction Design Process</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;500;600;700;800;900&family=Manrope:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0f0f;--bg2:#161616;--bg3:#1e1e1e;--bg4:#252525;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e8e6e0;--text2:#a09e98;--text3:#666460;--teal:#5eead4;--teal2:#2dd4bf;--teal-dim:rgba(94,234,212,0.12);--teal-dim2:rgba(94,234,212,0.06);--purple:#a78bfa;--purple-dim:rgba(167,139,250,0.12);--amber:#fbbf24;--amber-dim:rgba(251,191,36,0.10);--red:#f87171;--red-dim:rgba(248,113,113,0.10);--green:#86efac;--green-dim:rgba(134,239,172,0.10);--blue:#93c5fd;--blue-dim:rgba(147,197,253,0.10);--nav-w:240px;--font-head:"Darker Grotesque",sans-serif;--font-body:"Manrope",sans-serif;--font-mono:"Space Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.6;min-height:100vh}
+nav{position:fixed;top:0;left:0;width:var(--nav-w);height:100vh;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
+.nav-logo{padding:28px 24px 20px;border-bottom:1px solid var(--border)}
+.nav-logo-mark{font-family:var(--font-head);font-size:20px;font-weight:900;letter-spacing:-.5px;color:var(--teal)}
+.nav-logo-sub{font-size:11px;color:var(--text3);font-family:var(--font-mono);margin-top:2px;letter-spacing:.05em}
+.nav-section{padding:20px 0 8px}
+.nav-section-label{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);padding:0 24px;margin-bottom:6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 24px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;border-left:2px solid transparent;text-decoration:none;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{color:var(--text);background:var(--bg3)}
+.nav-item.active{color:var(--teal);border-left:2px solid var(--teal);background:var(--teal-dim2)}
+.nav-num{font-family:var(--font-mono);font-size:10px;color:var(--text3);min-width:18px}
+.nav-footer{margin-top:auto;padding:16px 24px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);line-height:1.5}
+main{margin-left:var(--nav-w);min-height:100vh}
+.section{display:none;max-width:900px;margin:0 auto;padding:64px 48px 96px}
+.section.visible{display:block}
+.section-eyebrow{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--teal);margin-bottom:12px}
+.section-title{font-family:var(--font-head);font-size:42px;font-weight:900;letter-spacing:-.8px;line-height:1.05;color:var(--text);margin-bottom:16px}
+.section-intro{font-size:16px;font-weight:300;color:var(--text2);line-height:1.7;max-width:640px;margin-bottom:8px}
+.section-connector{display:flex;align-items:center;gap:12px;margin:32px 0;padding:14px 20px;border:1px solid var(--border2);border-radius:8px;background:var(--bg2)}
+.connector-arrow{color:var(--teal);font-size:18px;flex-shrink:0}
+.connector-text{font-size:13px;color:var(--text2);line-height:1.5}
+.connector-text strong{color:var(--teal);font-weight:600}
+h2{font-family:var(--font-head);font-size:24px;font-weight:800;letter-spacing:-.3px;color:var(--text);margin:48px 0 16px}
+h3{font-family:var(--font-head);font-size:17px;font-weight:700;color:var(--text);margin:28px 0 10px}
+p{color:var(--text2);margin-bottom:12px;line-height:1.65}
+p:last-child{margin-bottom:0}
+.divider{height:1px;background:var(--border);margin:40px 0}
+.stage-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:20px}
+.stage-tab{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;font-family:var(--font-mono);border:1px solid var(--border);background:var(--bg2);color:var(--text3);cursor:pointer;transition:all .15s}
+.stage-tab:hover{color:var(--text);border-color:var(--border2)}
+.stage-tab.active{background:var(--teal-dim);color:var(--teal);border-color:rgba(94,234,212,0.3)}
+.stage-tab.new-stage{border-color:rgba(94,234,212,0.2)}
+.job-card{border:1px solid var(--border);border-radius:10px;background:var(--bg2);overflow:hidden;margin-bottom:12px}
+.job-card.is-new{border-color:rgba(94,234,212,0.25)}
+.job-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.job-header.is-new{background:rgba(94,234,212,0.04)}
+.job-stage{font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:3px}
+.new-pill{display:inline-block;padding:1px 6px;border-radius:99px;font-size:9px;background:var(--teal-dim);color:var(--teal);margin-left:6px;vertical-align:middle}
+.job-moment{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text);line-height:1.3}
+.job-body{padding:14px 18px}
+.job-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.jb{padding:8px 10px;border-radius:6px}
+.jb.fn{background:var(--bg3)}
+.jb.em{background:rgba(249,168,212,0.06)}
+.jb.so{background:var(--blue-dim)}
+.jb.co{background:var(--green-dim)}
+.jb-label{font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.jb-label.fn{color:var(--text3)}
+.jb-label.em{color:#f9a8d4}
+.jb-label.so{color:var(--blue)}
+.jb-label.co{color:var(--green)}
+.jb-text{font-size:12px;color:var(--text2);line-height:1.5}
+.tension-box{padding:8px 12px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.15);border-radius:6px;font-size:11px;color:#d97706;line-height:1.5}
+.tension-lbl{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:2px;color:var(--amber)}
+.intents{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
+.intent-chip{padding:2px 8px;border-radius:99px;font-size:10px;font-family:var(--font-mono);background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.intent-chip.gap-chip{background:var(--red-dim);color:var(--red);border-color:rgba(248,113,113,0.2)}
+.rbadge{display:inline-block;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:600;font-family:var(--font-mono);white-space:nowrap;flex-shrink:0}
+.rb-pm{background:rgba(167,139,250,0.15);color:var(--purple)}
+.rb-lead{background:rgba(94,234,212,0.12);color:var(--teal)}
+.rb-dev{background:rgba(251,191,36,0.12);color:var(--amber)}
+.flow-wrap{border:1px solid var(--border);border-radius:10px;background:var(--bg2);overflow:hidden;margin:20px 0}
+.flow-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.flow-title{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--text)}
+.flow-tabs{display:flex;gap:4px}
+.flow-tab{padding:4px 10px;border-radius:5px;font-size:11px;font-weight:600;font-family:var(--font-mono);border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .15s}
+.flow-tab.active{background:var(--bg3);color:var(--text);border-color:var(--border2)}
+.flow-content{padding:20px}
+.flow-phase{margin-bottom:24px}
+.flow-phase-label{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);margin-bottom:10px}
+.flow-nodes{display:flex;flex-direction:column;gap:6px}
+.flow-node{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:7px;border:1px solid var(--border)}
+.fn-system{background:var(--bg3)}
+.fn-user{background:rgba(94,234,212,0.05);border-color:rgba(94,234,212,0.15)}
+.fn-decision{background:var(--purple-dim);border-color:rgba(167,139,250,0.2)}
+.fn-output{background:var(--blue-dim);border-color:rgba(147,197,253,0.2)}
+.fn-gate{background:var(--amber-dim);border-color:rgba(251,191,36,0.2)}
+.fn-eval{background:var(--green-dim);border-color:rgba(134,239,172,0.2)}
+.fn-error{background:var(--red-dim);border-color:rgba(248,113,113,0.2)}
+.node-type{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;min-width:64px;flex-shrink:0;padding-top:1px}
+.nt-system{color:var(--text3)}.nt-user{color:var(--teal)}.nt-decision{color:var(--purple)}.nt-output{color:var(--blue)}.nt-gate{color:var(--amber)}.nt-eval{color:var(--green)}.nt-error{color:var(--red)}
+.node-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.35}
+.node-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.cmap{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:20px 0}
+.cmap-grid{display:grid;grid-template-columns:72px 1fr 1fr 1fr}
+.cmap-header{padding:10px 12px;font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px}
+.cmh-moment{background:var(--bg3);color:var(--text3)}
+.cmh-pm{background:rgba(167,139,250,0.1);color:var(--purple)}
+.cmh-lead{background:rgba(94,234,212,0.08);color:var(--teal)}
+.cmh-dev{background:rgba(251,191,36,0.08);color:var(--amber)}
+.cmap-cell{padding:10px 12px;border-bottom:1px solid var(--border);border-left:1px solid var(--border);min-height:70px;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:background .12s}
+.cmap-cell:hover{background:var(--bg3)}
+.cmap-cell.active{background:var(--bg3);outline:1px solid rgba(94,234,212,0.4);outline-offset:-1px}
+.cmap-cell.empty{background:rgba(0,0,0,0.2);cursor:default}
+.cmap-cell.empty:hover{background:rgba(0,0,0,0.2)}
+.cmap-moment-label{padding:10px;border-bottom:1px solid var(--border);background:var(--bg3);display:flex;flex-direction:column;justify-content:center;gap:2px}
+.cml-step{font-family:var(--font-mono);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
+.cml-name{font-size:11px;font-weight:600;color:var(--text);line-height:1.3}
+.cell-who{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.cw-pm{color:var(--purple)}.cw-lead{color:var(--teal)}.cw-dev{color:var(--amber)}.cw-sk{color:var(--text3)}.cw-eval{color:var(--green)}
+.cell-text{font-size:11px;color:var(--text);line-height:1.4}
+.cell-surf{font-size:10px;color:var(--text3);margin-top:1px}
+.cell-tag{display:inline-block;padding:1px 6px;border-radius:99px;font-size:10px;font-weight:600;margin-top:3px;align-self:flex-start}
+.ct-read{background:var(--blue-dim);color:var(--blue)}
+.ct-art{background:var(--purple-dim);color:var(--purple)}
+.ct-write{background:var(--amber-dim);color:var(--amber)}
+.ct-eval{background:var(--green-dim);color:var(--green)}
+.ct-gate{background:var(--amber-dim);color:var(--amber)}
+.cmap-full-row{grid-column:1/-1;padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer}
+.cfr-coord{background:rgba(94,234,212,0.06)}
+.cfr-gate{background:rgba(167,139,250,0.08)}
+.cfr-eval{background:rgba(134,239,172,0.08)}
+.cfr-threshold{background:rgba(251,191,36,0.06)}
+.cfr-icon{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.cfr-lbl{font-size:12px;font-weight:600}
+.cfr-sub{font-size:11px;margin-left:auto;font-style:italic;color:var(--text3)}
+.cfr-coord .cfr-icon{background:var(--teal);border-radius:50%}
+.cfr-coord .cfr-lbl{color:var(--teal2)}
+.cfr-gate .cfr-icon{background:var(--purple)}
+.cfr-gate .cfr-lbl{color:var(--purple)}
+.cfr-eval .cfr-icon{background:var(--green)}
+.cfr-eval .cfr-lbl{color:var(--green)}
+.cfr-threshold .cfr-icon{background:var(--amber);border-radius:50%}
+.cfr-threshold .cfr-lbl{color:var(--amber)}
+.cmap-detail{margin-top:12px;border:1px solid var(--border);border-radius:8px;padding:16px 18px;background:var(--bg2)}
+.cd-hint{font-size:12px;color:var(--text3);font-style:italic}
+.cd-new-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10px;font-family:var(--font-mono);font-weight:700;background:var(--green-dim);color:var(--green);margin-bottom:10px}
+.cd-title{font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--text);margin-bottom:12px}
+.cd-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.cd-block{padding:10px 12px;border-radius:6px;background:var(--bg3)}
+.cd-block.eval{background:rgba(134,239,172,0.06)}
+.cd-blbl{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:3px}
+.cd-block.eval .cd-blbl{color:var(--green)}
+.cd-btxt{font-size:12px;color:var(--text2);line-height:1.5}
+.cd-warn{padding:10px 14px;background:var(--red-dim);border-radius:6px;border:1px solid rgba(248,113,113,0.2)}
+.cd-wlbl{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--red);display:block;margin-bottom:3px}
+.cd-wtxt{font-size:12px;color:#fca5a5;line-height:1.5}
+.esc-table{width:100%;border-collapse:collapse;margin:16px 0}
+.esc-table th{font-family:var(--font-mono);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border)}
+.esc-table td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);vertical-align:top;line-height:1.45}
+.esc-table tr:last-child td{border-bottom:none}
+.esc-id{font-family:var(--font-mono);font-size:11px;color:var(--text3)}
+.pri-high{color:var(--red);font-weight:600;font-size:11px}
+.pri-med{color:var(--amber);font-weight:600;font-size:11px}
+.pri-low{color:var(--text3);font-size:11px}
+.pri-backlog{color:var(--text3);font-size:11px;font-style:italic}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:48px}
+.ps-card{padding:20px;border:1px solid var(--border);border-radius:10px;background:var(--bg2);cursor:pointer;transition:all .2s}
+.ps-card:hover{border-color:var(--teal);background:var(--teal-dim2)}
+.ps-num{font-family:var(--font-mono);font-size:11px;color:var(--teal);margin-bottom:8px}
+.ps-title{font-family:var(--font-head);font-size:15px;font-weight:800;color:var(--text);line-height:1.2;margin-bottom:6px}
+.ps-desc{font-size:11px;color:var(--text3);line-height:1.45}
+.stage-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.stage-card{padding:14px 16px;border:1px solid var(--border);border-radius:8px;background:var(--bg2)}
+.sc-num{font-family:var(--font-mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:4px}
+.sc-name{font-family:var(--font-head);font-size:16px;font-weight:800}
+.sc-desc{font-size:11px;color:var(--text3);margin-top:3px}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}
+.cg-card{padding:18px 20px;border:1px solid var(--border);border-radius:10px;background:var(--bg2)}
+.cg-label{font-size:11px;font-weight:700;margin-bottom:10px;color:var(--text3)}
+.cg-row{font-size:12px;color:var(--text2);margin-bottom:6px;line-height:1.4}
+.artifact-steps{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.art-step{display:flex;gap:16px;padding:16px 18px;border:1px solid var(--border);border-radius:8px;background:var(--bg2)}
+.art-num{font-family:var(--font-mono);font-size:22px;font-weight:700;min-width:36px;flex-shrink:0;padding-top:2px}
+.art-title{font-family:var(--font-head);font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px}
+.art-answers{font-size:12px;color:var(--text3);margin-bottom:6px;font-style:italic}
+.art-desc{font-size:13px;color:var(--text2)}
+
+/* ── Blueprint shared styles ── */
+.bp-section-eyebrow{font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--teal);margin-bottom:10px}
+.bp-section-title{font-family:var(--font-head);font-size:36px;font-weight:900;letter-spacing:-.8px;line-height:1.05;color:var(--text);margin-bottom:12px}
+.bp-intro{font-size:15px;font-weight:300;color:var(--text2);line-height:1.7;max-width:640px;margin-bottom:24px}
+.bp-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid rgba(255,255,255,0.07)}
+.bp-li{display:flex;align-items:center;gap:5px;font-size:11px;color:#a09e98}
+.bp-ld{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.bp-wrap{overflow-x:auto;border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:16px}
+.bp-grid{display:grid;min-width:max-content}
+.bp-row-label{position:sticky;left:0;z-index:10;padding:10px 12px;border-right:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:8px;min-width:130px;font-size:11px;font-weight:600;white-space:nowrap}
+.bp-rl-pm{background:#1a1726;color:#a78bfa}
+.bp-rl-lead{background:#131d1c;color:#5eead4}
+.bp-rl-dev{background:#1d1a11;color:#fbbf24}
+.bp-rl-lov{background:#0a0a0a;color:#666460}
+.bp-rl-back{background:#131a14;color:#86efac}
+.bp-rl-surf{background:#161616;color:#666460}
+.bp-rl-moment{background:#161616;color:#666460;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.bp-rdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.bp-rd-pm{background:#a78bfa}.bp-rd-lead{background:#5eead4}.bp-rd-dev{background:#fbbf24}
+.bp-mc{padding:10px 12px;border-right:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);background:#161616;min-width:168px;max-width:168px}
+.bp-mc-eval{background:#121a13}
+.bp-mc-step{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#666460;margin-bottom:3px}
+.bp-mc-name{font-size:12px;font-weight:600;color:#e8e6e0;line-height:1.3}
+.bp-mc-trigger{font-size:10px;color:#666460;margin-top:3px}
+.bp-mc-eval .bp-mc-step{color:#86efac}
+.bp-mc-eval .bp-mc-name{color:#d1fae5}
+.bp-mc-eval .bp-mc-trigger{color:#86efac}
+.bp-cell{padding:9px 11px;border-right:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);min-width:168px;max-width:168px;min-height:80px;cursor:pointer;transition:background .12s;display:flex;flex-direction:column;gap:4px;background:#131313}
+.bp-cell:hover{background:#1e1e1e}
+.bp-cell.bp-active{outline:1.5px solid rgba(94,234,212,0.4);outline-offset:-1px;background:#1e1e1e}
+.bp-cell.bp-empty{background:#0c0c0c;cursor:default}
+.bp-cell.bp-empty:hover{background:#0c0c0c}
+.bp-cell.bp-eval-cell{background:#111813}
+.bp-cell.bp-eval-cell:hover{background:#141f15}
+.bp-lov-cell{border-right:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);min-width:168px;max-width:168px;height:26px;background:#0a0a0a;position:relative}
+.bp-lov-line{position:absolute;top:50%;left:0;right:0;height:1.5px;background:repeating-linear-gradient(90deg,#666460 0,#666460 5px,transparent 5px,transparent 10px);opacity:.5}
+.bp-surf-cell{padding:7px 10px;border-right:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);min-width:168px;max-width:168px;background:#161616;display:flex;flex-wrap:wrap;gap:3px;align-content:flex-start}
+.bp-sp{display:inline-block;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:500;font-family:var(--font-mono)}
+.bp-sp-slack{background:#132020;color:#5eead4}
+.bp-sp-web{background:#1a1726;color:#a78bfa}
+.bp-sp-ide{background:#131c26;color:#93c5fd}
+.bp-sp-jira{background:#1d1a11;color:#fbbf24}
+.bp-sp-github{background:#1c1c1c;color:#a09e98}
+.bp-sp-confluence{background:#131c26;color:#93c5fd}
+.bp-sp-auto{background:#132018;color:#86efac}
+.bp-back-cell{padding:8px 10px;border-right:1px solid rgba(255,255,255,0.07);border-bottom:1px solid rgba(255,255,255,0.07);min-width:168px;max-width:168px;background:#121a13;font-size:11px;color:#86efac;line-height:1.4;cursor:pointer;transition:background .12s}
+.bp-back-cell:hover{background:#162018}
+.bp-back-cell.bp-active{outline:1.5px solid rgba(134,239,172,0.3);outline-offset:-1px}
+.bp-back-cell.bp-empty-back{background:#101410;cursor:default}
+.bp-back-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#86efac;margin-bottom:3px}
+.bp-twho{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.bp-tw-pm{color:#a78bfa}.bp-tw-lead{color:#5eead4}.bp-tw-dev{color:#fbbf24}
+.bp-ttext{font-size:11px;color:#e8e6e0;line-height:1.4;flex:1}
+.bp-tag{display:inline-block;padding:1px 6px;border-radius:99px;font-size:10px;font-weight:500;margin-top:2px;align-self:flex-start}
+.bp-tag-r{background:#131c26;color:#93c5fd}
+.bp-tag-w{background:#1d1a11;color:#fbbf24}
+.bp-tag-g{background:#201e12;color:#fbbf24}
+.bp-tag-e{background:#132018;color:#86efac}
+.bp-tag-auto{background:#1c1c1c;color:#a09e98}
+.bp-detail{margin-top:1rem;border:1px solid rgba(255,255,255,0.07);border-radius:10px;background:#161616;padding:1rem 1.25rem}
+.bp-detail-hint{font-size:12px;color:#666460;font-style:italic}
+.bp-detail-title{font-size:14px;font-weight:500;color:#e8e6e0;margin-bottom:8px;line-height:1.35}
+.bp-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.bp-db{padding:9px 11px;border-radius:8px;background:#1e1e1e}
+.bp-db-eval{background:#121a13}
+.bp-db-lbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:#666460;margin-bottom:3px}
+.bp-db-eval .bp-db-lbl{color:#86efac}
+.bp-db-txt{font-size:12px;color:#a09e98;line-height:1.5}
+.bp-warn{padding:9px 12px;background:#1f1212;border-radius:8px;border:1px solid rgba(248,113,113,0.2)}
+.bp-warn-lbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:#ef4444;display:block;margin-bottom:2px}
+.bp-warn-txt{font-size:12px;color:#fca5a5;line-height:1.5}
+.bp-stage-nav{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:20px}
+.bp-stage-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:600;font-family:var(--font-mono);border:1px solid rgba(255,255,255,0.1);background:#161616;color:#666460;cursor:pointer;transition:all .15s;text-decoration:none}
+.bp-stage-btn:hover{color:#e8e6e0;border-color:rgba(255,255,255,0.2)}
+.bp-stage-btn.bp-stage-active{background:rgba(94,234,212,0.1);color:#5eead4;border-color:rgba(94,234,212,0.3)}
+
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-mark">Sokuvo</div>
+    <div class="nav-logo-sub">V2 &middot; Interaction Design</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Overview</div>
+    <button class="nav-item active" data-sec="intro" onclick="navigate('intro')"><span class="nav-num">00</span>Introduction</button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Process</div>
+    <button class="nav-item" data-sec="jtbd" onclick="navigate('jtbd')"><span class="nav-num">01</span>Jobs to be Done</button>
+    <button class="nav-item" data-sec="flows" onclick="navigate('flows')"><span class="nav-num">02</span>Mental Model Flows</button>
+    <button class="nav-item" data-sec="cxd" onclick="navigate('cxd')"><span class="nav-num">03</span>JTBD &times; Conv. Design</button>
+    <button class="nav-item" data-sec="cmap" onclick="navigate('cmap')"><span class="nav-num">04</span>Define Conv. Map</button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Service Blueprint</div>
+    <button class="nav-item" data-sec="bp_define" onclick="navigate('bp_define')"><span class="nav-num">05a</span>Define</button>
+    <button class="nav-item" data-sec="bp_plan" onclick="navigate('bp_plan')"><span class="nav-num">05b</span>Plan</button>
+    <button class="nav-item" data-sec="bp_build" onclick="navigate('bp_build')"><span class="nav-num">05c</span>Build</button>
+    <button class="nav-item" data-sec="bp_test" onclick="navigate('bp_test')"><span class="nav-num">05d</span>Test</button>
+    <button class="nav-item" data-sec="bp_review" onclick="navigate('bp_review')"><span class="nav-num">05e</span>Review</button>
+    <button class="nav-item" data-sec="bp_ship" onclick="navigate('bp_ship')"><span class="nav-num">05f</span>Ship</button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Decisions</div>
+    <button class="nav-item" data-sec="escalations" onclick="navigate('escalations')"><span class="nav-num">06</span>Open Questions</button>
+  </div>
+  <div class="nav-footer">Sokuvo V2 &middot; ui-patterns-v2<br>Last updated April 2026</div>
+</nav>
+<main>
+<div class="section visible" id="sec-intro">
+  <div class="section-eyebrow">Sokuvo V2 &mdash; Interaction Design Process</div>
+  <div class="section-title">How we designed<br><span style="color:var(--teal)">the interaction model</span></div>
+  <p class="section-intro">This document walks the team through the full interaction design process for Sokuvo V2 &mdash; from understanding what users are trying to accomplish, to mapping how conversations flow across six delivery stages.</p>
+  <div class="process-steps">
+    <div class="ps-card" onclick="navigate('jtbd')"><div class="ps-num">01 &rarr;</div><div class="ps-title">Jobs to be Done</div><div class="ps-desc">What each role needs at each stage &mdash; and why it matters to them.</div></div>
+    <div class="ps-card" onclick="navigate('flows')"><div class="ps-num">02 &rarr;</div><div class="ps-title">Mental Model Flows</div><div class="ps-desc">How the system behaves for each interaction pattern &mdash; happy paths and failure modes.</div></div>
+    <div class="ps-card" onclick="navigate('cxd')"><div class="ps-num">03 &rarr;</div><div class="ps-title">JTBD &times; Conv. Design</div><div class="ps-desc">The bridge between user motivation and system behavior.</div></div>
+    <div class="ps-card" onclick="navigate('cmap')"><div class="ps-num">04 &rarr;</div><div class="ps-title">Define Conv. Map</div><div class="ps-desc">The Define stage &mdash; three roles in parallel with the V2 evaluator layer.</div></div>
+  </div>
+  <div class="divider"></div>
+  <h2>The V2 stage model</h2>
+  <p>V1 had four merged stations. V2 separates them into six discrete stages with evaluation at every boundary.</p>
+  <div class="stage-cards">
+    <div class="stage-card"><div class="sc-num">01</div><div class="sc-name" style="color:var(--teal)">Define</div><div class="sc-desc">Typed spec contract with evaluator scoring</div></div>
+    <div class="stage-card"><div class="sc-num">02</div><div class="sc-name" style="color:var(--blue)">Plan</div><div class="sc-desc">Model-tiered task breakdown</div></div>
+    <div class="stage-card"><div class="sc-num">03</div><div class="sc-name" style="color:var(--purple)">Build</div><div class="sc-desc">Context-aware implementation</div></div>
+    <div class="stage-card"><div class="sc-num">04</div><div class="sc-name" style="color:var(--amber)">Test</div><div class="sc-desc">Multi-pass automated evaluation</div></div>
+    <div class="stage-card"><div class="sc-num">05</div><div class="sc-name" style="color:var(--text)">Review</div><div class="sc-desc">Trust classification + human sign-off</div></div>
+    <div class="stage-card"><div class="sc-num">06</div><div class="sc-name" style="color:var(--green)">Ship</div><div class="sc-desc">Audit trail + deploy approval</div></div>
+  </div>
+  <div class="section-connector"><div class="connector-arrow">&rarr;</div><div class="connector-text">Start with <strong>Jobs to be Done</strong> to understand the motivation layer, then move through the process in order. If you are already familiar with the context, jump directly to the <strong>Conversation Map</strong> for the Define stage detail.</div></div>
+</div>
+<div class="section" id="sec-jtbd">
+  <div class="section-eyebrow">01 &mdash; Jobs to be Done</div>
+  <div class="section-title">What users are<br>trying to accomplish</div>
+  <p class="section-intro">JTBD maps motivation across six stages and three roles. Four layers per job: functional (the task), emotional (the state they want to reach or avoid), social (how they want to be perceived), and continuity (what they need to enable the next person in the chain).</p>
+  <div class="section-connector"><div class="connector-arrow">&rarr;</div><div class="connector-text">These jobs are the <strong>ground truth</strong> for all interaction design decisions. Every pattern in the conversation map traces back to a job defined here. Stages marked <span style="color:var(--teal)">&#10022;</span> are new in V2.</div></div>
+  <div class="stage-tabs" id="jtbd-tabs"></div>
+  <div id="jtbd-cards"></div>
+</div>
+<div class="section" id="sec-flows">
+  <div class="section-eyebrow">02 &mdash; Mental Model Flows</div>
+  <div class="section-title">How the system<br>handles each pattern</div>
+  <p class="section-intro">Three interaction patterns run across all six stages. Each has a distinct shape: how the system responds, what it shows while processing, how the user interacts with the output, and how the loop closes.</p>
+  <div class="section-connector"><div class="connector-arrow">&rarr;</div><div class="connector-text">These flows are the <strong>system perspective</strong>. The conversation map (section 04) translates them into the <strong>user perspective</strong> &mdash; what users see and do at each moment.</div></div>
+  <div id="flow-content"></div>
+</div>
+<div class="section" id="sec-cxd">
+  <div class="section-eyebrow">03 &mdash; JTBD &times; Conversation Design</div>
+  <div class="section-title">Why conversational design<br>is different</div>
+  <p class="section-intro">Visual UI design organises space. Conversational design organises time. The mental models, tools, and artefacts are different.</p>
+  <div class="divider"></div>
+  <h2>The core difference</h2>
+  <div class="compare-grid">
+    <div class="cg-card">
+      <div class="cg-label" style="color:var(--text2)">Visual UI</div>
+      <div class="cg-row">Organises <strong>space</strong></div>
+      <div class="cg-row">User navigates between screens</div>
+      <div class="cg-row">Interface waits</div>
+      <div class="cg-row">Sitemap = hierarchy of pages</div>
+      <div class="cg-row">Wireframe = layout of a screen</div>
+    </div>
+    <div class="cg-card" style="border-color:rgba(94,234,212,0.2);background:var(--teal-dim2)">
+      <div class="cg-label" style="color:var(--teal)">Conversational UI (Sokuvo)</div>
+      <div class="cg-row">Organises <strong style="color:var(--teal)">time and state</strong></div>
+      <div class="cg-row">User expresses intent in natural language</div>
+      <div class="cg-row">System responds in turns</div>
+      <div class="cg-row">Conversation map = graph of states</div>
+      <div class="cg-row">Message anatomy = structure of a turn</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <h2>The four artefacts and what they answer</h2>
+  <div class="artifact-steps">
+    <div class="art-step"><div class="art-num" style="color:var(--teal)">01</div><div><div class="art-title">Jobs to be Done</div><div class="art-answers">Answers: What is the user trying to accomplish and why?</div><div class="art-desc">Maps motivation across six stages and three roles. The continuity job is unique to Sokuvo &mdash; one actor's output is always the next actor's input.</div></div></div>
+    <div class="art-step"><div class="art-num" style="color:var(--blue)">02</div><div><div class="art-title">Mental Model Flows</div><div class="art-answers">Answers: How does the system behave for each interaction type?</div><div class="art-desc">Three patterns (Read/Analysis, Artifact Generation, Write/Mutation) with happy paths and error maps. The system perspective, not the user perspective.</div></div></div>
+    <div class="art-step"><div class="art-num" style="color:var(--purple)">03</div><div><div class="art-title">Artifact State Model</div><div class="art-answers">Answers: What states can an artifact be in, and what can the user do in each?</div><div class="art-desc">Seven states (generating, draft, iterating, pending_approval, published, archived, blocked) with explicit transition rules and ownership boundaries.</div></div></div>
+    <div class="art-step"><div class="art-num" style="color:var(--amber)">04</div><div><div class="art-title">Conversation Map</div><div class="art-answers">Answers: What does the user see turn by turn, and how do multiple roles coordinate?</div><div class="art-desc">Three roles in parallel, showing what each actor sees at each moment, how the system responds, and where coordination events connect the roles.</div></div></div>
+  </div>
+  <div class="divider"></div>
+  <h2>The new V2 actor: the evaluator</h2>
+  <p>V2 introduces a fourth actor in the Define stage: the <strong style="color:var(--green)">spec evaluator</strong>. It is not a user, not a conversational agent, and not a system step &mdash; it is an automated quality layer that produces a score, identifies gaps, and controls a gate.</p>
+  <p>The evaluator raises design questions that do not exist in V1: How does the PM experience a blocked state caused by an automated score? How does the Eng Lead calibrate annotation depth based on a score they did not produce? How does the Developer know which evaluator gaps are worth their attention? These questions are the open questions in section 05.</p>
+</div>
+<div class="section" id="sec-cmap">
+  <div class="section-eyebrow">04 &mdash; Conversation Map</div>
+  <div class="section-title">Define stage &mdash;<br>three roles in parallel</div>
+  <p class="section-intro">The conversation map shows what each actor sees and does at each moment. Three roles run in parallel &mdash; their paths cross at coordination events, gates, and handoff signals. Click any cell for the full turn detail.</p>
+  <div class="section-connector"><div class="connector-arrow">&rarr;</div><div class="connector-text">Green rows are <strong>new in V2</strong> &mdash; the spec evaluator, threshold gate, and score-aware iteration do not exist in V1. They represent the biggest design questions for the team to resolve.</div></div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin:16px 0">
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)"><span style="width:10px;height:10px;border-radius:2px;background:rgba(147,197,253,0.3);display:inline-block"></span>Read / Analysis</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)"><span style="width:10px;height:10px;border-radius:2px;background:rgba(167,139,250,0.3);display:inline-block"></span>Artifact Generation</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)"><span style="width:10px;height:10px;border-radius:2px;background:rgba(251,191,36,0.25);display:inline-block"></span>Write / Mutation</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)"><span style="width:10px;height:10px;border-radius:2px;background:rgba(134,239,172,0.35);display:inline-block"></span>Evaluator (new V2)</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)"><span style="width:10px;height:10px;border-radius:2px;background:rgba(94,234,212,0.25);display:inline-block"></span>Coordination</span>
+    <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3)"><span style="width:10px;height:10px;border-radius:2px;background:rgba(167,139,250,0.2);display:inline-block"></span>Gate</span>
+  </div>
+  <div class="cmap"><div class="cmap-grid" id="cmap-grid"></div></div>
+  <div class="cmap-detail" id="cmap-detail"><p class="cd-hint">Click any cell or row to see the full turn detail.</p></div>
+</div>
+
+<!-- ══════════ BLUEPRINT SECTIONS ══════════ -->
+
+<!-- Landing: blueprint intro section -->
+<div class="section" id="sec-bp_define">
+<div class="bp-section-eyebrow">05a — Service Blueprint · Define</div>
+<div class="bp-section-title">Define stage</div>
+<p class="bp-intro">The Define stage is the only stage where the interaction begins with a user action rather than an auto-trigger. PM initiates the spec, Sokuvo clarifies and generates a draft, the spec evaluator scores it, and both PM and Eng Lead must clear separate gates before the stage transitions to Plan.</p>
+<div class="bp-legend" id="bp-legend-define"></div>
+<div class="bp-wrap"><div class="bp-grid" id="bp-grid-define"></div></div>
+<div class="bp-detail" id="bp-detail-define"><p class="bp-detail-hint">Click any cell to see full detail.</p></div>
+</div>
+
+<div class="section" id="sec-bp_plan">
+<div class="bp-section-eyebrow">05b — Service Blueprint · Plan</div>
+<div class="bp-section-title">Plan stage</div>
+<p class="bp-intro">Plan is auto-triggered by the Define gate closure. Sokuvo reads the full approved spec and generates a task breakdown. The Eng Lead is the primary actor — they refine, annotate, and assign before the PM reviews. Two separate gates (PM product approval + Eng Lead technical sign-off) are required to transition to Build.</p>
+<div class="bp-legend" id="bp-legend-plan"></div>
+<div class="bp-wrap"><div class="bp-grid" id="bp-grid-plan"></div></div>
+<div class="bp-detail" id="bp-detail-plan"><p class="bp-detail-hint">Click any cell to see full detail.</p></div>
+</div>
+
+<div class="section" id="sec-bp_build">
+<div class="bp-section-eyebrow">05c — Service Blueprint · Build</div>
+<div class="bp-section-title">Build stage</div>
+<p class="bp-intro">Build is driven by the Developer with IDE context injected via MCP. Sokuvo is heavily backstage — assembling context, routing escalations, populating PR descriptions, and running the initial code review. The Eng Lead reviews PRs in two discrete steps: analysis always separate from posting.</p>
+<div class="bp-legend" id="bp-legend-build"></div>
+<div class="bp-wrap"><div class="bp-grid" id="bp-grid-build"></div></div>
+<div class="bp-detail" id="bp-detail-build"><p class="bp-detail-hint">Click any cell to see full detail.</p></div>
+</div>
+
+<div class="section" id="sec-bp_test">
+<div class="bp-section-eyebrow">05d — Service Blueprint · Test</div>
+<div class="bp-section-title">Test stage</div>
+<p class="bp-intro">Test introduces the multi-pass evaluator as the primary actor. The agent generates tests from spec ACs, then three evaluator passes run sequentially — structural (cheap), functional (balanced), adversarial (frontier, conditional). Humans respond to evaluator output rather than initiating actions.</p>
+<div class="bp-legend" id="bp-legend-test"></div>
+<div class="bp-wrap"><div class="bp-grid" id="bp-grid-test"></div></div>
+<div class="bp-detail" id="bp-detail-test"><p class="bp-detail-hint">Click any cell to see full detail.</p></div>
+</div>
+
+<div class="section" id="sec-bp_review">
+<div class="bp-section-eyebrow">05e — Service Blueprint · Review</div>
+<div class="bp-section-title">Review stage</div>
+<p class="bp-intro">Review assembles the delivery record and routes each output through trust classification before human review. PM and Eng Lead conduct parallel reviews from different angles — PM validates AC coverage, Eng Lead validates technical quality. Both must sign off before Ship.</p>
+<div class="bp-legend" id="bp-legend-review"></div>
+<div class="bp-wrap"><div class="bp-grid" id="bp-grid-review"></div></div>
+<div class="bp-detail" id="bp-detail-review"><p class="bp-detail-hint">Click any cell to see full detail.</p></div>
+</div>
+
+<div class="section" id="sec-bp_ship">
+<div class="bp-section-eyebrow">05f — Service Blueprint · Ship</div>
+<div class="bp-section-title">Ship stage</div>
+<p class="bp-intro">Ship is the most backstage-heavy stage — three consecutive columns with no human action before the Eng Lead reviews the changelog and PR. The PM's explicit deploy approval is the only irreversible human action in the entire delivery chain. On approval, a cascade of automated closures fires.</p>
+<div class="bp-legend" id="bp-legend-ship"></div>
+<div class="bp-wrap"><div class="bp-grid" id="bp-grid-ship"></div></div>
+<div class="bp-detail" id="bp-detail-ship"><p class="bp-detail-hint">Click any cell to see full detail.</p></div>
+</div>
+
+<div class="section" id="sec-escalations">
+  <div class="section-eyebrow">05 &mdash; Open Questions</div>
+  <div class="section-title">What the team<br>needs to decide</div>
+  <p class="section-intro">These decisions emerged from the interaction design process and cannot be resolved by design alone. They are documented here to make them explicit before the conversation map is built for Plan, Build, Test, Review, and Ship.</p>
+  <div class="section-connector"><div class="connector-arrow">&rarr;</div><div class="connector-text">Items marked <span class="pri-high">Highest / High</span> block the conversation map and Define stage UX. Address them first.</div></div>
+  <table class="esc-table" id="esc-table"></table>
+</div>
+</main>
+<script>
+
+function navigate(sec) {
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('visible'); });
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  var el = document.getElementById('sec-' + sec);
+  if (el) el.classList.add('visible');
+  var active = document.querySelector('.nav-item[data-sec="' + sec + '"]');
+  if (active) active.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+var STAGES = ['define','plan','build','test','review','ship'];
+var STAGE_LABELS = {define:'Define',plan:'Plan',build:'Build',test:'Test',review:'Review',ship:'Ship'};
+var NEW_STAGES = ['define','test','ship'];
+var JTBD = {
+  define: [
+    {role:'pm',rl:'Project Manager',rc:'rb-pm',isNew:true,gap:false,
+     moment:'Starting a feature with a spec evaluator scoring completeness before approval',
+     fn:'Turn a vague need into a typed spec contract that scores above the quality threshold.',em:'Not feel like the spec is guesswork. Know Sokuvo validated it before signing off.',
+     so:'Show the team the spec is grounded and evaluated — not written quickly.',co:'Give the Eng Lead a spec that passed the evaluator — so their review starts from a known baseline.',
+     intents:['write_artifacts_prd','deep_research','confluence_create'],tension:'The evaluator threshold gate is undefined. If score is 74 and threshold is 75, can the PM override? The relationship between evaluator score and human approval needs design.'},
+    {role:'lead',rl:'Engineering Lead',rc:'rb-lead',isNew:true,gap:false,
+     moment:'Reviewing an evaluator-scored spec to add technical annotations',
+     fn:'Assess feasibility against a spec that already has a quality score.',em:'Not add annotations to a spec that will be rejected by the evaluator anyway.',
+     so:'Be the technical voice that closes evaluator-surfaced gaps.',co:'Produce annotations specific enough for the Plan agent to decompose without another clarification round.',
+     intents:['design_architecture','deep_research','project_status'],tension:'The evaluator runs before Eng Lead annotations. Should it re-score after annotations? The score reflects the PM draft, not the annotated version.'},
+    {role:'dev',rl:'Developer',rc:'rb-dev',isNew:true,gap:true,
+     moment:'Receiving a domain-filtered spec notification with evaluator score',
+     fn:'Read only the spec parts relevant to my domain — and see the score before flagging questions.',em:'Not waste energy flagging gaps the evaluator already caught.',
+     so:'Be seen as someone who contributes technically early.',co:'Flag missing technical info before the gate closes — not after Plan has decomposed it.',
+     intents:['deep_research','morning_report'],tension:'Domain-filtered spec delivery is a gap. The evaluator score cannot be delivered if the notification system does not exist.'},
+  ],
+  plan: [
+    {role:'pm',rl:'Project Manager',rc:'rb-pm',isNew:false,gap:false,
+     moment:'Reviewing task breakdown against the typed spec contract with traceability',
+     fn:'Verify every task traces back to a spec acceptance criterion.',em:'Not discover in week 2 that the plan drifted from the spec.',
+     so:'Authorize build with confidence — the plan is grounded in the spec contract.',co:'Give developers a plan where every ticket carries spec section, AC, and architecture context.',
+     intents:['project_status','deep_research','jira_update'],tension:'Side-by-side spec vs. plan view is a named requirement but has no current workflow or surface.'},
+    {role:'lead',rl:'Engineering Lead',rc:'rb-lead',isNew:false,gap:false,
+     moment:'Decomposing the typed spec into model-tiered tasks with dependency graphs',
+     fn:'Decompose into tasks assigned to the right model tier with dependencies and token budgets explicit.',em:'Not hand developers tasks too vague for the model to execute reliably.',
+     so:'Demonstrate technical ownership — the decomposition reflects architecture decisions.',co:'Produce tickets where the developer can pull full context via MCP on day one.',
+     intents:['jira_create','design_architecture','deep_research'],tension:'Batch jira_create for a full spec decomposition has no pattern that scales past 5 tickets.'},
+    {role:'dev',rl:'Developer',rc:'rb-dev',isNew:false,gap:false,
+     moment:'Reviewing assigned tasks with full context before confirming readiness',
+     fn:'Access complete task context without asking the Eng Lead to explain the ticket.',em:'Not start a task feeling I am missing something important.',
+     so:'Self-assign tasks visibly — signal availability and domain ownership.',co:'Confirm readiness so the Eng Lead knows the plan is understood.',
+     intents:['deep_research','morning_report','jira_update'],tension:'The ready-to-build confirmation is a named intent but has no workflow or surface.'},
+  ],
+  build: [
+    {role:'pm',rl:'Project Manager',rc:'rb-pm',isNew:false,gap:false,
+     moment:'Monitoring progress and responding to decision requests with full context',
+     fn:'Review daily progress without asking the Eng Lead for a status update.',em:'Not feel the project is a black box during Build.',
+     so:'Be a responsive decision-maker — the person who unblocks.',co:'Close decision loops fast enough that developers are not blocked.',
+     intents:['morning_report','project_status','bug_triage'],tension:'Decision requests route via Slack DMs with no structured context. This is the coordination tax Sokuvo should eliminate.'},
+    {role:'lead',rl:'Engineering Lead',rc:'rb-lead',isNew:false,gap:false,
+     moment:'Reviewing PRs with spec and architecture context already loaded',
+     fn:'Review PRs with acceptance criteria and architecture decisions already surfaced.',em:'Not discover architecture drift in a PR that has already been merged.',
+     so:'Be the technical standard-setter whose PR review teaches, not just blocks.',co:'Give developers actionable feedback tied to spec and architecture decisions.',
+     intents:['code_review','bug_triage','project_status','design_architecture'],tension:'Code review has two discrete steps — analysis must be separate from posting to GitHub.'},
+    {role:'dev',rl:'Developer',rc:'rb-dev',isNew:false,gap:true,
+     moment:'Pulling full task context into the IDE in under 15 seconds via MCP',
+     fn:'Pull full task context — spec section, architecture decisions, AC — in under 15 seconds.',em:'Start building with confidence — know what I am building and why.',
+     so:'Produce code that passes review on the first try.',co:'Create PRs auto-linked to task, spec, and decisions.',
+     intents:['morning_report','deep_research'],tension:'The failure mode — missing or stale context — is what needs visible design, not the happy path.'},
+  ],
+  test: [
+    {role:'pm',rl:'Project Manager',rc:'rb-pm',isNew:true,gap:false,
+     moment:'Reviewing multi-pass evaluator test results against acceptance criteria',
+     fn:'See which acceptance criteria passed the test suite without reading raw test output.',em:'Not approve a feature that silently fails an acceptance criterion.',
+     so:'Make a test coverage decision from a position of understanding.',co:'Give the Eng Lead a clear signal on which edge cases the automated suite did not cover.',
+     intents:['project_status','morning_report'],tension:'The multi-pass evaluator output is technical. What is the PM-facing representation of Pass 1 / 2 / 3 results?'},
+    {role:'lead',rl:'Engineering Lead',rc:'rb-lead',isNew:true,gap:false,
+     moment:'Reviewing multi-pass evaluator output and deciding edge cases the eval cannot resolve',
+     fn:'See three-pass eval results and decide which failures represent real risk.',em:'Not have silent failures slip past the eval. The adversarial pass is the last defense.',
+     so:'Be the technical decision-maker for edge cases the eval cannot classify.',co:'Produce a test coverage report the PM can read without technical translation.',
+     intents:['bug_triage','project_status','deep_research'],tension:'Pass 3 (adversarial review) is conditional — who triggers it and under what conditions?'},
+    {role:'dev',rl:'Developer',rc:'rb-dev',isNew:true,gap:false,
+     moment:'Reviewing generated tests, fixing failures, confirming coverage before the Test gate',
+     fn:'See which tests the agent generated from AC, which are failing, and what fixes are proposed.',em:'Not fix a test the agent generated incorrectly and ship a false green.',
+     so:'Be the person who closes the test loop cleanly.',co:'Hand off a test suite the Eng Lead can review without re-running the tests.',
+     intents:['bug_triage','morning_report'],tension:'If the developer disagrees with a generated test, what is the workflow for rejecting it?'},
+  ],
+  review: [
+    {role:'pm',rl:'Project Manager',rc:'rb-pm',isNew:false,gap:true,
+     moment:'Validating delivered work against the typed spec contract before approving release',
+     fn:'Review work against an auto-generated AC checklist with pass/fail status.',em:'Not sign off on a release that contradicts the spec.',
+     so:'Release with confidence — the review summary traces to the typed spec.',co:'Trigger the Ship stage with a clean audit trail.',
+     intents:['project_status','write_artifacts_prd','confluence_create'],tension:'Release notes generation has no dedicated workflow — falls under write_artifacts_prd which is Define-focused.'},
+    {role:'lead',rl:'Engineering Lead',rc:'rb-lead',isNew:false,gap:false,
+     moment:'Final technical review with trust classification routing flagged items',
+     fn:'Review consolidated technical state with trust classification showing what needs human review.',em:'Not miss a security or performance issue that ships to production.',
+     so:'Sign off on technical readiness as a deliberate decision.',co:'Produce architecture documentation capturing what was decided during Build.',
+     intents:['code_review','bug_triage','project_status','write_documentation'],tension:'Trust classification threshold values and routing logic are hypotheses not yet validated.'},
+    {role:'dev',rl:'Developer',rc:'rb-dev',isNew:false,gap:false,
+     moment:'Wrapping up implementation, responding to rework, closing all open threads',
+     fn:'Confirm all PRs merged, tests passing, and documentation done in one place.',em:'Get a clear done signal — not wonder whether silence means approved or forgotten.',
+     so:'Be seen as someone who closes loops cleanly.',co:'Receive release notification and ticket transition so the next stage starts clean.',
+     intents:['morning_report','write_documentation','bug_triage'],tension:'The developer done signal currently comes from GitHub, Jira, and Slack separately.'},
+  ],
+  ship: [
+    {role:'pm',rl:'Project Manager',rc:'rb-pm',isNew:true,gap:false,
+     moment:'Triggering deployment with full traceability — changelog, audit trail, decision log',
+     fn:'Approve the final deploy with full traceability visible and trigger project archival.',em:'Not approve a deploy and discover a missing audit entry.',
+     so:'Ship as a deliberate decision — the deploy approval is a named, logged action.',co:'Leave the project in a state the next team can understand without a handoff meeting.',
+     intents:['project_status','confluence_create','morning_report'],tension:'If the final evaluator finds an incomplete audit trail, does Ship block automatically or does the PM decide?'},
+    {role:'lead',rl:'Engineering Lead',rc:'rb-lead',isNew:true,gap:false,
+     moment:'Reviewing agent-generated PR, changelog, and audit trail before the final merge',
+     fn:'Review the PR and changelog for accuracy, confirm audit trail is complete.',em:'Not merge a PR that is technically correct but missing a decision record.',
+     so:'Be the technical authority on what ships.',co:'Leave an audit trail the next team can understand without talking to anyone.',
+     intents:['code_review','project_status','write_documentation'],tension:'No diff exists between what the agent generated and the actual decisions made. The Eng Lead has to know what was decided to spot errors.'},
+    {role:'dev',rl:'Developer',rc:'rb-dev',isNew:true,gap:false,
+     moment:'Receiving release notification and closing the delivery loop',
+     fn:'Receive a clear signal that the work shipped — tickets transitioned, PRs merged.',em:'Get closure. Know the work landed and is accounted for.',
+     so:'Be seen as someone who ships cleanly — no orphaned tickets.',co:'Leave the codebase in a state the next developer can understand.',
+     intents:['morning_report'],tension:'If something is wrong at Ship, there is no mechanism to notify the developer specifically.'},
+  ],
+};
+
+function buildJTBD() {
+  var tabs = document.getElementById('jtbd-tabs');
+  var cards = document.getElementById('jtbd-cards');
+  var activeStage = 'define';
+
+  STAGES.forEach(function(s) {
+    var btn = document.createElement('button');
+    btn.className = 'stage-tab' + (NEW_STAGES.indexOf(s)>=0 ? ' new-stage' : '') + (s===activeStage ? ' active' : '');
+    btn.textContent = STAGE_LABELS[s] + (NEW_STAGES.indexOf(s)>=0 ? ' ✶' : '');
+    btn.onclick = function() {
+      activeStage = s;
+      document.querySelectorAll('.stage-tab').forEach(function(t){t.classList.remove('active');});
+      btn.classList.add('active');
+      renderCards(s);
+    };
+    tabs.appendChild(btn);
+  });
+
+  function jobCard(j, stageLbl) {
+    var headerCls = j.isNew ? ' is-new' : '';
+    var stagePill = j.isNew ? ' <span class="new-pill">new V2</span>' : '';
+    var intentChips = j.intents.map(function(i){ return '<span class="intent-chip">' + i + '</span>'; }).join('');
+    if (j.gap) intentChips += '<span class="intent-chip gap-chip">gap &mdash; no intent yet</span>';
+    var tensionHtml = j.tension ? '<div class="tension-box"><span class="tension-lbl">Design tension</span>' + j.tension + '</div>' : '';
+    return '<div class="job-card' + headerCls + '">'
+      + '<div class="job-header' + headerCls + '">'
+        + '<div><div class="job-stage">' + stageLbl + ' stage' + stagePill + '</div>'
+        + '<div class="job-moment">' + j.moment + '</div></div>'
+        + '<span class="rbadge ' + j.rc + '">' + j.rl + '</span>'
+      + '</div>'
+      + '<div class="job-body">'
+        + '<div class="job-grid">'
+          + '<div class="jb fn"><div class="jb-label fn">Functional job</div><div class="jb-text">' + j.fn + '</div></div>'
+          + '<div class="jb em"><div class="jb-label em">Emotional job</div><div class="jb-text">' + j.em + '</div></div>'
+          + '<div class="jb so"><div class="jb-label so">Social job</div><div class="jb-text">' + j.so + '</div></div>'
+          + '<div class="jb co"><div class="jb-label co">Continuity job</div><div class="jb-text">' + j.co + '</div></div>'
+        + '</div>'
+        + '<div class="intents">' + intentChips + '</div>'
+        + tensionHtml
+      + '</div></div>';
+  }
+
+  function renderCards(stage) {
+    var jobs = JTBD[stage] || [];
+    var html = '';
+    jobs.forEach(function(j){ html += jobCard(j, STAGE_LABELS[stage]); });
+    cards.innerHTML = html;
+  }
+  renderCards(activeStage);
+}
+var FLOWS_DATA = [
+  {id:'read',title:'Read / Analysis',sub:'Pattern A &middot; B',desc:'Triggered by read intents (morning_report, bug_triage, deep_research, code_review). The system classifies, retrieves, assembles, and streams. Loop closure is silent &mdash; no confirmation required.',phases:[
+  {label:'Trigger + routing',nodes:[{type:'user',name:'User sends read intent',sub:'Natural language in Slack or Web'},{type:'system',name:'qa_router classifies',sub:'Haiku model &mdash; fast routing'},{type:'decision',name:'Scope clear?',sub:'Pattern B modifier check'}]},
+  {label:'Pattern B (when scope is ambiguous)',nodes:[{type:'system',name:'One clarifying question',sub:'Inline, in the user\'s language'},{type:'user',name:'User answers',sub:'Scope resolved &mdash; flow continues'}]},
+  {label:'Retrieval + assembly',nodes:[{type:'system',name:'Waiting state shown',sub:'Typing indicator + stage labels'},{type:'system',name:'Retrieval runs',sub:'Jira &middot; GitHub &middot; Confluence &middot; Drive'},{type:'system',name:'Validate results',sub:'Tenant &middot; freshness &middot; scope match'},{type:'system',name:'Context assembled',sub:'Sources + query + memory'}]},
+  {label:'Response + closure',nodes:[{type:'output',name:'Response streams',sub:'Block Kit &middot; citations attached to claims'},{type:'system',name:'Thin context signal?',sub:'Appended if sources sparse'},{type:'output',name:'Loop closes',sub:'Silent (briefing) &middot; follow-up (investigation) &middot; save (architecture)'}]},
+],errors:[{type:'error',name:'Tenant contamination (P0)',sub:'Cross-tenant data in retrieval &mdash; block output, escalate to engineering'},{type:'error',name:'Empty retrieval',sub:'LLM knowledge only &mdash; honesty signal shown'},{type:'error',name:'Chain-of-thought leakage',sub:'No UI mitigation &mdash; prompt engineering fix required'},{type:'error',name:'Mermaid in Slack',sub:'Deep-link + thumbnail fallback to Web dashboard'},{type:'error',name:'System waits after Read',sub:'Pattern A enforced &mdash; no approval step on read intents'}]},
+  {id:'artifact',title:'Artifact Generation',sub:'Pattern A &middot; B + publish gate',desc:'Triggered by write artifact intents (PRD, epic, story, documentation). Short artifacts deliver inline in Slack; long artifacts promote to the Web editor. Publication triggers the Write/Mutation pattern.',phases:[
+  {label:'Trigger + routing',nodes:[{type:'user',name:'User requests artifact',sub:'PRD &middot; epic &middot; user story &middot; documentation'},{type:'system',name:'qa_router routes',sub:'write_artifacts_* workflows'},{type:'decision',name:'Scope clear?',sub:'Pattern B if format/sources missing'}]},
+  {label:'Retrieval + grounding check',nodes:[{type:'system',name:'Retrieval runs',sub:'Jira &middot; Confluence &middot; Drive'},{type:'decision',name:'Grounding check',sub:'Sufficient context per section?'},{type:'system',name:'Gap flags prepared',sub:'Thin sections marked before generation'}]},
+  {label:'Size bifurcation',nodes:[{type:'decision',name:'Artifact size?',sub:'~500 words threshold'},{type:'output',name:'Short &rarr; inline Slack',sub:'Collapsed &middot; expand action &middot; iteration in thread'},{type:'output',name:'Long &rarr; Web editor',sub:'Three-panel split &middot; section-by-section stream'}]},
+  {label:'Iteration + publish gate',nodes:[{type:'gate',name:'Iteration loop',sub:'Edit inline &middot; regenerate section (diff preview) &middot; mark gap'},{type:'gate',name:'Publish gate',sub:'&rarr; Write/Mutation pattern &middot; ApprovalGate opens'},{type:'output',name:'Artifact published',sub:'Confluence &middot; traced &middot; labeled &middot; linked'}]},
+],errors:[{type:'error',name:'Epic/story not discoverable',sub:'No manifest.json &mdash; escalate to engineering'},{type:'error',name:'Empty retrieval',sub:'All sections flagged &middot; publish blocked until gaps resolved'},{type:'error',name:'Regen overwrites manual edit',sub:'Diff preview required &mdash; accept new vs. keep edit'},{type:'error',name:'Confluence write fails',sub:'Draft preserved &middot; retry available &middot; specific error shown'}]},
+  {id:'write',title:'Write / Mutation',sub:'Pattern C (single + batch)',desc:'Triggered by mutation intents (jira_create, jira_update, confluence_create). The system prepares a draft, opens an ApprovalGate, waits for explicit approval, commits, and shows a receipt. Silence is never approval.',phases:[
+  {label:'Trigger + disambiguation',nodes:[{type:'user',name:'User sends mutation intent',sub:'Create &middot; update &middot; publish'},{type:'decision',name:'Create or update?',sub:'Similar ticket may exist &mdash; ask'},{type:'system',name:'Draft assembled',sub:'Inferred fields labeled &ldquo;Sokuvo inferred&rdquo;'}]},
+  {label:'ApprovalGate',nodes:[{type:'gate',name:'ApprovalGate opens',sub:'pending_approval state'},{type:'user',name:'Approve / Edit / Cancel',sub:'Button is canonical &middot; NL approval is additive'},{type:'system',name:'Commit executes',sub:'Writing to Jira &middot; Confluence&hellip;'}]},
+  {label:'Receipt + closure',nodes:[{type:'gate',name:'ApprovalGate closes',sub:'Write confirmed &middot; audit logged immutably'},{type:'output',name:'Receipt shown',sub:'Record key &middot; deep-link &middot; summary'},{type:'output',name:'Closure shape',sub:'Silent (update) &middot; follow-up (create) &middot; handoff (Confluence)'}]},
+],errors:[{type:'error',name:'confluence_update missing',sub:'No workflow &mdash; honest out-of-scope response &middot; escalate to backlog'},{type:'error',name:'Silent wrong inference',sub:'&ldquo;Sokuvo inferred&rdquo; label is mandatory on every guessed field'},{type:'error',name:'NL approval ambiguity',sub:'Button is canonical &mdash; NL mapping scope TBD'},{type:'error',name:'Permission error post-approval',sub:'Draft preserved &middot; gate reopens &middot; specific error shown'},{type:'error',name:'Cascading batch failures',sub:'Dependency tree shown &middot; retry epic first &middot; children auto-retry'}]},
+];
+
+function buildFlows() {
+  var wrap = document.getElementById('flow-content');
+  FLOWS_DATA.forEach(function(p) {
+    var fw = document.createElement('div');
+    fw.className = 'flow-wrap';
+    fw.innerHTML = '<div class="flow-header">'
+      + '<div><div class="flow-title">' + p.title + '</div>'
+      + '<div style="font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--font-mono)">' + p.sub + '</div></div>'
+      + '<div class="flow-tabs">'
+      + '<button class="flow-tab active" onclick="showFlowTab(this,\'' + p.id + '\',\'happy\')">Happy path</button>'
+      + '<button class="flow-tab" onclick="showFlowTab(this,\'' + p.id + '\',\'errors\')">Error states</button>'
+      + '</div></div>'
+      + '<div class="flow-content">'
+      + '<p style="font-size:13px;color:var(--text3);margin-bottom:16px">' + p.desc + '</p>'
+      + '<div id="fh-' + p.id + '">' + buildHappyNodes(p) + '</div>'
+      + '<div id="fe-' + p.id + '" style="display:none">' + buildErrorNodes(p) + '</div>'
+      + '</div>';
+    wrap.appendChild(fw);
+  });
+}
+
+function buildHappyNodes(p) {
+  var html = '';
+  p.phases.forEach(function(ph) {
+    html += '<div class="flow-phase"><div class="flow-phase-label">' + ph.label + '</div><div class="flow-nodes">';
+    ph.nodes.forEach(function(n) {
+      html += '<div class="flow-node fn-' + n.type + '">'
+        + '<div class="node-type nt-' + n.type + '">' + n.type + '</div>'
+        + '<div><div class="node-name">' + n.name + '</div><div class="node-sub">' + n.sub + '</div></div>'
+        + '</div>';
+    });
+    html += '</div></div>';
+  });
+  return html;
+}
+
+function buildErrorNodes(p) {
+  var html = '<div class="flow-nodes">';
+  p.errors.forEach(function(n) {
+    html += '<div class="flow-node fn-' + n.type + '">'
+      + '<div class="node-type nt-' + n.type + '">' + n.type + '</div>'
+      + '<div><div class="node-name">' + n.name + '</div><div class="node-sub">' + n.sub + '</div></div>'
+      + '</div>';
+  });
+  return html + '</div>';
+}
+
+function showFlowTab(btn, pid, tab) {
+  var fw = btn.closest('.flow-wrap');
+  fw.querySelectorAll('.flow-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('fh-' + pid).style.display = tab==='happy' ? '' : 'none';
+  document.getElementById('fe-' + pid).style.display = tab==='errors' ? '' : 'none';
+}
+var CMAP_DETAILS = {
+  m1_pm: {isNew:false,title:'PM initiates the Define stage',what:'PM sends a natural language description of a need. Vague is fine.',sokuvo:'qa_router classifies as write_artifacts_prd. Retrieval pulls source docs from Confluence and Drive.',surface:'Slack: conversational message. Web: text input with project scope selector.',jtbd:'Turn a vague need into a typed spec contract that scores above the quality threshold.',openq:null},
+  m2_pm: {isNew:false,title:'Sokuvo clarifies scope',what:'Sokuvo identifies the most critical gap and asks one clarifying question at a time.',sokuvo:'Pattern B modifier. One question per turn ordered by gap severity.',surface:'Slack: inline message. Web: prompt overlay with suggested answers.',jtbd:'Not feel like I am the only one holding the context.',openq:'Clarification rules vary per workflow with no shared schema.'},
+  m3_pm: {isNew:true,title:'Sokuvo generates PRD — evaluator runs in parallel',what:'PRD streams section by section. The evaluator runs simultaneously — the PM sees draft and score arrive together.',sokuvo:'write_artifacts_prd generates the draft. spec_evaluator runs 0-100 scoring: gap detection, contradiction check, completeness per section.',surface:'Web editor: draft in center panel. Evaluator score in right panel alongside sources.',jtbd:'Know that Sokuvo validated the spec before I review it.',openq:'Should the evaluator re-run after each PM edit? Continuous re-scoring has a cost implication.'},
+  m4_pm: {isNew:true,title:'PM iterates against evaluator gaps',what:'PM sees the score (e.g. 58/100) and a specific gap list. PM iterates against these gaps, not freeform.',sokuvo:'Each gap has an inline resolve action. PM can ask Sokuvo to fill it, write manually, or accept as intentional. Score updates as gaps close.',surface:'Web editor: evaluator panel shows score, gap list, per-gap resolve actions. Score badge updates in real time.',jtbd:'Not do freeform editing and then discover the spec still fails the evaluator.',openq:'If PM marks a gap as intentional, does that count toward the score? Acknowledged vs. unresolved gaps need different scoring treatment.'},
+  eval_node: {isNew:true,title:'Spec evaluator — automated quality scoring',what:'The evaluator runs a 0-100 rubric against the spec draft. It produces a completeness score per section, a gap list, and a stakeholder sign-off checklist.',sokuvo:'spec_evaluator skill. Checks: section completeness, contradiction detection against project context, gap surfacing for AC and edge cases. Does not block PM interaction — runs in parallel.',surface:'Web editor: evaluator score and gap list in the right panel. Score badge is persistent and updates as gaps are resolved.',jtbd:'Specification quality is the primary bottleneck for agent reliability downstream.',openq:'The rubric dimensions and weights are hypotheses not yet calibrated. The threshold default is also a hypothesis. Both need calibration before the gate has real meaning.'},
+  threshold_node: {isNew:true,title:'Threshold gate — score blocks or enables PM publish',what:'If score is below threshold, Publish is disabled. The PM sees exactly which gaps are blocking. If score meets threshold, the PM gate opens.',sokuvo:'Threshold gate enforced by evaluator output, not PM judgment alone. PM can request an override — a logged, auditable action.',surface:'Web editor: Publish button disabled with specific message — Score is 68, threshold is 75. Close 2 gaps to enable publish.',jtbd:'Know the spec meets baseline quality before it enters Plan.',openq:'Three undefined decisions: (1) What is the threshold value? (2) Can the PM override, and what is the governance process? (3) Does the threshold vary by project type?'},
+  pm_gate: {isNew:false,title:'PM spec gate — explicit approval after threshold is met',what:'The PM explicitly approves the spec. This is a human judgment gate on top of the automated threshold — the PM can still reject a spec that passed the evaluator.',sokuvo:'The PM gate is a named human action. On approval, confluence_create executes and the artifact transitions to published.',surface:'Web editor: Approve and publish button, active only after threshold gate passes.',jtbd:'Own the spec as a deliberate decision.',openq:null},
+  m5_pm: {isNew:false,title:'PM publishes the spec to Confluence',what:'PM approves explicitly. The published page carries evaluator score and gap closure log as metadata.',sokuvo:'confluence_create workflow. Published page includes Sokuvo provenance footer plus: score at publish time, resolved gaps list, accepted gaps list.',surface:'Web editor: publish gate modal. Receipt in Slack with deep-link.',jtbd:'Publish the spec with a quality signal attached.',openq:'Post-publish Eng Lead annotations do not update the score — the Confluence page reflects the PM-approved version.'},
+  m6_lead: {isNew:true,title:'Eng Lead reviews spec with score',what:'Eng Lead receives notification showing the spec and its current score. Uses the score to calibrate annotation depth.',sokuvo:'Notification includes: spec title, current score, evaluator gap summary, deep-link.',surface:'Slack: notification card with score badge. Web editor: full spec with evaluator panel visible.',jtbd:'Not add annotations to a spec that will be rejected by the evaluator anyway.',openq:'Should the Eng Lead see the full evaluator output, or only technically relevant gaps?'},
+  m7_lead: {isNew:false,title:'Eng Lead adds technical annotations',what:'Eng Lead adds API contracts, risk flags, infrastructure dependencies, alternative approaches.',sokuvo:'No confluence_update workflow exists. Eng Lead annotates directly in Confluence. Sokuvo can draft annotation text from a Slack description.',surface:'Confluence: direct annotation. Slack: drafting annotation text with Sokuvo assistance.',jtbd:'Be the technical voice that closes gaps the evaluator surfaced.',openq:'Should Eng Lead annotations trigger an evaluator re-run?'},
+  m8_dev: {isNew:true,title:'Developer receives domain-filtered notification with score',what:'Developer receives a Slack notification with focused spec summary and the evaluator score. Can see which gaps are still open.',sokuvo:'Domain filtering is a named gap — no workflow exists yet.',surface:'Slack: notification with spec summary, score badge, domain-relevant gap highlights, deep-link.',jtbd:'Not waste energy flagging gaps the evaluator already caught.',openq:'Domain-filtered spec delivery remains a gap. Without it, the score reaches the developer unfiltered.'},
+  m9_dev: {isNew:true,title:'Developer flags technical questions',what:'Developer reads the spec. The evaluator gap list tells them which gaps are already known — they focus on domain-specific issues the evaluator may not have caught.',sokuvo:'deep_research answers technical questions. Routing mechanism for developer questions to Eng Lead is not designed.',surface:'Slack: developer asks questions in a thread. Sokuvo answers inline or routes.',jtbd:'Be seen as someone who contributes technically early.',openq:'No routing mechanism exists for developer questions to reach the Eng Lead through Sokuvo.'},
+  tech_gate: {isNew:false,title:'Technical approval gate — both approvals required',what:'Both PM gate and Eng Lead technical approval are required before Define to Plan transition fires.',sokuvo:'No designed surface for the technical approval signal. The transition cannot be automated without a detectable Eng Lead approval event.',surface:'Currently: Slack DMs or Confluence comments — outside Sokuvo detection.',jtbd:'Ensure the spec entering Plan has both product and technical sign-off.',openq:'The most critical gap in Define coordination. Sokuvo can only detect the PM gate — the Eng Lead gate is invisible to the system.'},
+  m10_lead: {isNew:false,title:'Eng Lead approves or returns with revision requests',what:'Eng Lead makes the technical approval decision. If revision needed: specific feedback tied to specific PRD sections.',sokuvo:'No workflow for the technical approval gesture. Approval happens outside Sokuvo.',surface:'Slack: approval message. Confluence: comment.',jtbd:'Not ship a plan that collapses under technical scrutiny.',openq:'Technical approval has no designed surface in Sokuvo. The stage transition cannot auto-trigger.'},
+  m11_pm: {isNew:false,title:'PM notifies team — Define stage complete',what:'PM notifies the team that the spec is approved, evaluated, and prioritized for planning. Notification includes the score.',sokuvo:'Sokuvo drafts the notification from the approved spec context. PM approves the draft before sending.',surface:'Slack: channel notification linking to published spec with score badge and key decisions summary.',jtbd:'Give the team enough signal to start Plan without a kickoff meeting.',openq:null},
+};
+
+var CMAP_ROWS = [
+  {type:'moment',step:'M1',name:'Initiate Define',
+   pm:{key:'m1_pm',who:'cw-pm',wl:'PM',txt:'Describes need &mdash; vague is fine',surf:'Slack &middot; Web dashboard',tag:'ct-art',tl:'Artifact Generation'},
+   lead:{empty:true},dev:{empty:true}},
+  {type:'coord',lbl:'Sokuvo pulls source documents &mdash; Confluence &middot; Drive &middot; Jira',sub:'Retrieval + grounding check'},
+  {type:'moment',step:'M2',name:'Clarify scope',
+   pm:{key:'m2_pm',who:'cw-sk',wl:'Sokuvo',txt:'One clarifying question at a time',surf:'Slack &middot; Web inline',tag:'ct-art',tl:'Artifact Gen'},
+   lead:{empty:true},dev:{empty:true}},
+  {type:'moment',step:'M3',name:'Generate draft + evaluator',
+   pm:{key:'m3_pm',who:'cw-sk',wl:'Sokuvo',txt:'PRD streams. Evaluator runs in parallel.',surf:'Web editor (split-view)',tag:'ct-eval',tl:'Evaluator'},
+   lead:{empty:true},dev:{empty:true}},
+  {type:'eval',lbl:'Spec evaluator &mdash; 0&ndash;100 score &middot; gap detection &middot; contradiction check',sub:'New in V2 &mdash; click for detail',key:'eval_node'},
+  {type:'moment',step:'M4',name:'PM iterates against gaps',
+   pm:{key:'m4_pm',who:'cw-pm',wl:'PM',txt:'Resolves evaluator gaps &mdash; score updates in real time',surf:'Web editor &mdash; evaluator panel',tag:'ct-eval',tl:'Evaluator'},
+   lead:{empty:true},dev:{empty:true}},
+  {type:'threshold',lbl:'Threshold gate &mdash; score must meet minimum before PM can publish',sub:'New in V2 &mdash; threshold and override policy are open questions',key:'threshold_node'},
+  {type:'gate',lbl:'PM spec gate &mdash; explicit approval',sub:'Artifact state: draft &rarr; pending_approval &rarr; published',key:'pm_gate'},
+  {type:'moment',step:'M5',name:'Publish to Confluence',
+   pm:{key:'m5_pm',who:'cw-pm',wl:'PM',txt:'Approves write &rarr; spec published with score metadata',surf:'Web editor &rarr; Confluence',tag:'ct-write',tl:'Write/Mutation'},
+   lead:{empty:true},dev:{empty:true}},
+  {type:'coord',lbl:'Handoff event &mdash; Eng Lead notified with spec score and gap summary',sub:'OQ5 &mdash; surface undefined &middot; score context is new V2 addition'},
+  {type:'moment',step:'M6',name:'Eng Lead: feasibility',
+   pm:{empty:true},
+   lead:{key:'m6_lead',who:'cw-lead',wl:'Eng Lead',txt:'Reviews spec with score. Calibrates annotation depth.',surf:'Confluence &middot; Slack &middot; Web',tag:'ct-read',tl:'Read/Analysis'},
+   dev:{empty:true}},
+  {type:'moment',step:'M7',name:'Eng Lead: annotate',
+   pm:{empty:true},
+   lead:{key:'m7_lead',who:'cw-lead',wl:'Eng Lead',txt:'Adds technical annotations &mdash; score should re-run',surf:'Confluence (direct) &middot; Slack (draft)',tag:'ct-write',tl:'Write/Mutation'},
+   dev:{empty:true}},
+  {type:'moment',step:'M8',name:'Dev: notification',
+   pm:{empty:true},lead:{empty:true},
+   dev:{key:'m8_dev',who:'cw-sk',wl:'Sokuvo',txt:'Domain-filtered summary with evaluator score',surf:'Slack',tag:'ct-read',tl:'Read/Analysis'}},
+  {type:'moment',step:'M9',name:'Dev: flags questions',
+   pm:{empty:true},lead:{empty:true},
+   dev:{key:'m9_dev',who:'cw-dev',wl:'Developer',txt:'Reads spec + gaps. Flags domain-specific issues.',surf:'Slack',tag:'ct-read',tl:'Read/Analysis'}},
+  {type:'gate',lbl:'Technical approval gate &mdash; both PM gate and Eng Lead approval required',sub:'Eng Lead approval surface undefined &mdash; stage transition cannot auto-trigger',key:'tech_gate'},
+  {type:'moment',step:'M10',name:'Eng Lead: approve',
+   pm:{empty:true},
+   lead:{key:'m10_lead',who:'cw-lead',wl:'Eng Lead',txt:'Approves or returns with section-level feedback',surf:'Slack &middot; Confluence',tag:'ct-gate',tl:'Gate'},
+   dev:{empty:true}},
+  {type:'coord',lbl:'Define &rarr; Plan stage transition fires',sub:'Both gates cleared &mdash; transition surface undefined'},
+  {type:'moment',step:'M11',name:'PM notifies team',
+   pm:{key:'m11_pm',who:'cw-pm',wl:'PM',txt:'Notifies team &mdash; approved spec with score badge',surf:'Slack channel',tag:'ct-write',tl:'Write/Mutation'},
+   lead:{empty:true},dev:{empty:true}}
+];
+
+function buildCmap() {
+  var grid = document.getElementById('cmap-grid');
+  var dot = function(bg) { return '<span style="width:7px;height:7px;border-radius:50%;background:' + bg + ';display:inline-block"></span>'; };
+  grid.innerHTML = '<div class="cmap-header cmh-moment">Moment</div>'
+    + '<div class="cmap-header cmh-pm">' + dot('var(--purple)') + ' PM</div>'
+    + '<div class="cmap-header cmh-lead">' + dot('var(--teal)') + ' Eng Lead</div>'
+    + '<div class="cmap-header cmh-dev">' + dot('var(--amber)') + ' Developer</div>';
+
+  CMAP_ROWS.forEach(function(row) {
+    if (row.type === 'coord') {
+      grid.innerHTML += '<div class="cmap-full-row cfr-coord"><div class="cfr-icon"></div>'
+        + '<span class="cfr-lbl">' + row.lbl + '</span>'
+        + '<span class="cfr-sub">' + row.sub + '</span></div>';
+    } else if (row.type === 'gate') {
+      var kAttr = row.key ? ' data-key="' + row.key + '"' : '';
+      grid.innerHTML += '<div class="cmap-full-row cfr-gate"' + kAttr + '><div class="cfr-icon"></div>'
+        + '<span class="cfr-lbl">' + row.lbl + '</span>'
+        + '<span class="cfr-sub">' + row.sub + '</span></div>';
+    } else if (row.type === 'eval') {
+      grid.innerHTML += '<div class="cmap-full-row cfr-eval" data-key="' + row.key + '"><div class="cfr-icon"></div>'
+        + '<span class="cfr-lbl">' + row.lbl + '</span>'
+        + '<span class="cfr-sub">' + row.sub + '</span></div>';
+    } else if (row.type === 'threshold') {
+      grid.innerHTML += '<div class="cmap-full-row cfr-threshold" data-key="' + row.key + '"><div class="cfr-icon"></div>'
+        + '<span class="cfr-lbl">' + row.lbl + '</span>'
+        + '<span class="cfr-sub">' + row.sub + '</span></div>';
+    } else {
+      grid.innerHTML += '<div class="cmap-moment-label">'
+        + '<span class="cml-step">' + row.step + '</span>'
+        + '<span class="cml-name">' + row.name + '</span></div>'
+        + cellHTML(row.pm) + cellHTML(row.lead) + cellHTML(row.dev);
+    }
+  });
+
+  grid.addEventListener('click', function(e) {
+    var el = e.target.closest('[data-key]');
+    if (!el) return;
+    var key = el.dataset.key;
+    var d = CMAP_DETAILS[key];
+    if (!d) return;
+    document.querySelectorAll('.cmap-cell.active').forEach(function(c){c.classList.remove('active');});
+    if (el.classList.contains('cmap-cell')) el.classList.add('active');
+    var newBadge = d.isNew ? '<div class="cd-new-badge">&#x2B22; New in V2 &mdash; evaluator layer</div>' : '';
+    var evalCls = d.isNew ? ' eval' : '';
+    var warnHtml = d.openq ? '<div class="cd-warn"><span class="cd-wlbl">Open question / gap</span><div class="cd-wtxt">' + d.openq + '</div></div>' : '';
+    document.getElementById('cmap-detail').innerHTML = newBadge
+      + '<div class="cd-title">' + d.title + '</div>'
+      + '<div class="cd-grid">'
+        + '<div class="cd-block"><div class="cd-blbl">What the user sees</div><div class="cd-btxt">' + d.what + '</div></div>'
+        + '<div class="cd-block' + evalCls + '"><div class="cd-blbl">What Sokuvo does</div><div class="cd-btxt">' + d.sokuvo + '</div></div>'
+        + '<div class="cd-block"><div class="cd-blbl">Surface</div><div class="cd-btxt">' + d.surface + '</div></div>'
+        + '<div class="cd-block"><div class="cd-blbl">Job this serves</div><div class="cd-btxt">' + d.jtbd + '</div></div>'
+      + '</div>' + warnHtml;
+  });
+}
+
+function cellHTML(t) {
+  if (!t || t.empty) return '<div class="cmap-cell empty" style="border-left:1px solid var(--border)"></div>';
+  return '<div class="cmap-cell" data-key="' + t.key + '" style="border-left:1px solid var(--border)">'
+    + '<span class="cell-who ' + t.who + '">' + t.wl + '</span>'
+    + '<span class="cell-text">' + t.txt + '</span>'
+    + '<span class="cell-surf">' + t.surf + '</span>'
+    + '<span class="cell-tag ' + t.tag + '">' + t.tl + '</span>'
+    + '</div>';
+}
+var ESCALATIONS = [
+  {id:'X1',item:'Handoff signal surface (Define&rarr;Plan, Plan&rarr;Build, Build&rarr;Test, Test&rarr;Review, Review&rarr;Ship)',flows:'All stages',priority:'highest',pri_label:'Highest'},
+  {id:'X2',item:'ApprovalGate session persistence duration &mdash; how long is a draft held if user steps away mid-preview?',flows:'Write/Mutation single',priority:'high',pri_label:'High'},
+  {id:'X3',item:'NL approval mapping scope &mdash; which phrases qualify, time window, false positive prevention',flows:'Write/Mutation single',priority:'high',pri_label:'High'},
+  {id:'X4',item:'Spec evaluator threshold value, override policy, and variation by project type',flows:'Define stage &mdash; threshold gate',priority:'high',pri_label:'High &mdash; new V2'},
+  {id:'X5',item:'Evaluator re-scoring after Eng Lead annotations',flows:'Define stage &mdash; annotation loop',priority:'high',pri_label:'High &mdash; new V2'},
+  {id:'X6',item:'Quality floor threshold for artifact generation &mdash; how many sparse sections block publish?',flows:'Artifact Generation',priority:'med',pri_label:'Medium'},
+  {id:'X7',item:'Multi-cycle artifact version control &mdash; full undo model across regeneration cycles',flows:'Artifact Generation',priority:'med',pri_label:'Medium'},
+  {id:'X8',item:'Batch write pattern &mdash; review-each vs approve-all threshold',flows:'Write/Mutation batch',priority:'med',pri_label:'Medium'},
+  {id:'X9',item:'Partial batch success definition &mdash; does the handoff fire at 80%? At 100%?',flows:'Write/Mutation batch',priority:'med',pri_label:'Medium'},
+  {id:'X10',item:'Test stage Pass 3 trigger &mdash; who initiates the adversarial eval pass, and on what signal?',flows:'Test stage',priority:'med',pri_label:'Medium &mdash; new V2'},
+  {id:'X11',item:'Test stage developer disagreement &mdash; workflow for rejecting an agent-generated test',flows:'Test stage',priority:'med',pri_label:'Medium &mdash; new V2'},
+  {id:'X12',item:'Ship stage changelog accuracy &mdash; no diff between agent output and actual decisions',flows:'Ship stage',priority:'med',pri_label:'Medium &mdash; new V2'},
+  {id:'X13',item:'Tone specification &mdash; no agreed baseline across workflows',flows:'Read/Analysis &middot; Artifact Generation',priority:'low',pri_label:'Low'},
+  {id:'X14',item:'Mermaid render path &mdash; deep-link + thumbnail vs image attachment in Slack',flows:'Read/Analysis',priority:'low',pri_label:'Low'},
+  {id:'X15',item:'confluence_update workflow missing entirely',flows:'Write/Mutation single',priority:'backlog',pri_label:'Backlog'},
+  {id:'X16',item:'write_artifacts_epic and write_artifacts_story missing manifest.json',flows:'Artifact Generation',priority:'backlog',pri_label:'Backlog'},
+];
+
+function buildEscalations() {
+  var tbl = document.getElementById('esc-table');
+  var html = '<thead><tr><th>ID</th><th>Decision needed</th><th>Flows affected</th><th>Priority</th></tr></thead><tbody>';
+  ESCALATIONS.forEach(function(e) {
+    var pc = e.priority==='highest'||e.priority==='high' ? 'pri-high' : e.priority==='med' ? 'pri-med' : e.priority==='low' ? 'pri-low' : 'pri-backlog';
+    html += '<tr><td class="esc-id">' + e.id + '</td><td>' + e.item + '</td>'
+      + '<td style="color:var(--text3);font-size:11px">' + e.flows + '</td>'
+      + '<td class="' + pc + '">' + e.pri_label + '</td></tr>';
+  });
+  tbl.innerHTML = html + '</tbody>';
+}
+
+buildJTBD();
+buildFlows();
+buildCmap();
+buildEscalations();
+
+
+// ════════════════════════════════════════════════════════
+// SERVICE BLUEPRINT ENGINE
+// ════════════════════════════════════════════════════════
+
+var BP_SURF_CLS = {slack:'bp-sp-slack',web:'bp-sp-web',ide:'bp-sp-ide',jira:'bp-sp-jira',github:'bp-sp-github',confluence:'bp-sp-confluence',auto:'bp-sp-auto'};
+var BP_SURF_LBL = {slack:'Slack',web:'Web',ide:'Cursor/IDE',jira:'Jira',github:'GitHub',confluence:'Confluence',auto:'Auto'};
+var BP_TAG_LBL = {'tag-r':'Read','tag-w':'Write','tag-g':'Gate','tag-e':'Eval','tag-auto':'Auto'};
+var ROWS_CFG = [
+  {id:'header',label:'Moment',cls:'bp-rl-moment'},
+  {id:'pm',label:'PM',cls:'bp-rl-pm',dot:'bp-rd-pm'},
+  {id:'lead',label:'Eng Lead',cls:'bp-rl-lead',dot:'bp-rd-lead'},
+  {id:'dev',label:'Developer',cls:'bp-rl-dev',dot:'bp-rd-dev'},
+  {id:'lov',label:'Line of visibility',cls:'bp-rl-lov'},
+  {id:'back',label:'Sokuvo backstage',cls:'bp-rl-back'},
+  {id:'surf',label:'Surface',cls:'bp-rl-surf'},
+];
+
+function buildBlueprintLegend(legendId) {
+  var el = document.getElementById(legendId);
+  if(!el) return;
+  el.innerHTML = [
+    ['#EEEDFE','#7F77DD','PM'],
+    ['#E1F5EE','#1D9E75','Eng Lead'],
+    ['#FAEEDA','#BA7517','Developer'],
+    ['#EAF3DE','#27500A','Sokuvo backstage'],
+  ].map(function(d){ return '<div class="bp-li"><div class="bp-ld" style="background:'+d[0]+';border:0.5px solid '+d[1]+'"></div>'+d[2]+'</div>'; }).join('') +
+  '<div class="bp-li" style="gap:8px"><div style="width:28px;height:2px;background:repeating-linear-gradient(90deg,#666460 0,#666460 4px,transparent 4px,transparent 8px)"></div>Line of visibility</div>';
+}
+
+function buildBlueprint(stageId, moments, roleCells, backText, surfs, details) {
+  buildBlueprintLegend('bp-legend-' + stageId);
+  var grid = document.getElementById('bp-grid-' + stageId);
+  if(!grid) return;
+  grid.style.gridTemplateColumns = '130px repeat(' + moments.length + ', 168px)';
+
+  ROWS_CFG.forEach(function(row) {
+    var lbl = document.createElement('div');
+    lbl.className = 'bp-row-label ' + row.cls;
+    lbl.innerHTML = row.dot ? '<span class="bp-rdot ' + row.dot + '"></span>' + row.label : row.label;
+    grid.appendChild(lbl);
+
+    moments.forEach(function(m, mi) {
+      var mk = 'm' + (mi + 1);
+
+      if(row.id === 'header') {
+        var mc = document.createElement('div');
+        mc.className = 'bp-mc' + (m.isEval ? ' bp-mc-eval' : '');
+        mc.innerHTML = '<div class="bp-mc-step">' + m.step + '</div><div class="bp-mc-name">' + m.name + '</div><div class="bp-mc-trigger">' + m.trigger + '</div>';
+        grid.appendChild(mc);
+
+      } else if(row.id === 'lov') {
+        var lc = document.createElement('div');
+        lc.className = 'bp-lov-cell';
+        lc.innerHTML = '<div class="bp-lov-line"></div>';
+        grid.appendChild(lc);
+
+      } else if(row.id === 'surf') {
+        var ss = surfs[mk] || [];
+        var sc = document.createElement('div');
+        sc.className = 'bp-surf-cell';
+        sc.innerHTML = ss.map(function(s){ return '<span class="bp-sp ' + (BP_SURF_CLS[s]||'') + '">' + (BP_SURF_LBL[s]||s) + '</span>'; }).join('');
+        grid.appendChild(sc);
+
+      } else if(row.id === 'back') {
+        var bt = backText[mk];
+        var bc = document.createElement('div');
+        bc.className = bt ? 'bp-back-cell' : 'bp-back-cell bp-empty-back';
+        if(bt) { bc.dataset.key = mk + '_back'; bc.dataset.stage = stageId; bc.innerHTML = '<div class="bp-back-lbl">Backstage</div>' + bt; }
+        grid.appendChild(bc);
+
+      } else {
+        var rk = row.id;
+        var cd = (roleCells[mk] || {})[rk];
+        var cell = document.createElement('div');
+        cell.className = cd ? ('bp-cell' + (m.isEval ? ' bp-eval-cell' : '')) : 'bp-cell bp-empty';
+        if(cd) {
+          cell.dataset.key = mk + '_' + rk;
+          cell.dataset.stage = stageId;
+          var rLabel = rk === 'pm' ? 'PM' : rk === 'lead' ? 'Eng Lead' : 'Developer';
+          var rCls = 'bp-tw-' + rk;
+          cell.innerHTML = '<span class="bp-twho ' + rCls + '">' + rLabel + '</span><span class="bp-ttext">' + cd.txt + '</span>' + (cd.tag ? '<span class="bp-tag ' + cd.tag + '">' + (BP_TAG_LBL[cd.tag]||'') + '</span>' : '');
+        }
+        grid.appendChild(cell);
+      }
+    });
+  });
+
+  // Click handler
+  grid.addEventListener('click', function(e) {
+    var el = e.target.closest('[data-key]');
+    if(!el) return;
+    var key = el.dataset.key;
+    // Primary: use rich details object
+    var d = details[key];
+    // Fallback: build minimal detail from roleCells data
+    if(!d || !d.title) {
+      var parts = key.split('_'); // e.g. "m3_pm" or "m3_back"
+      var mk = parts[0];
+      var role = parts.slice(1).join('_');
+      var mIdx = parseInt(mk.replace('m','')) - 1;
+      var m = moments[mIdx];
+      var cd = (roleCells[mk] || {})[role];
+      var bt = backText[mk];
+      var ss = (surfs[mk] || []);
+      var surfStr = ss.map(function(s){ return BP_SURF_LBL[s]||s; }).join(', ') || '—';
+      if(cd) {
+        d = {
+          title: (m ? m.step + ' — ' + m.name : key),
+          what: cd.txt,
+          sokuvo: bt || 'See backstage row for system actions in this moment.',
+          surface: surfStr,
+          jtbd: 'See JTBD matrix for the full job definition for this role and stage.',
+          openq: null
+        };
+      } else if(bt && role === 'back') {
+        d = {
+          title: 'Backstage — ' + (m ? m.name : mk),
+          what: 'This action is invisible to users — it runs in the Sokuvo backend.',
+          sokuvo: bt,
+          surface: surfStr,
+          jtbd: 'Backstage actions serve all roles by ensuring context and system state are correct before the next user-facing moment.',
+          openq: null
+        };
+      }
+    }
+    if(!d || !d.title) return;
+    document.querySelectorAll('.bp-cell.bp-active, .bp-back-cell.bp-active').forEach(function(c){ c.classList.remove('bp-active'); });
+    el.classList.add('bp-active');
+    var detEl = document.getElementById('bp-detail-' + stageId);
+    if(!detEl) return;
+    detEl.innerHTML =
+      '<div class="bp-detail-title">' + d.title + '</div>' +
+      '<div class="bp-detail-grid">' +
+        '<div class="bp-db"><div class="bp-db-lbl">What the actor sees</div><div class="bp-db-txt">' + d.what + '</div></div>' +
+        '<div class="bp-db' + (d.isEval?' bp-db-eval':'') + '"><div class="bp-db-lbl">What Sokuvo does</div><div class="bp-db-txt">' + d.sokuvo + '</div></div>' +
+        '<div class="bp-db"><div class="bp-db-lbl">Surface</div><div class="bp-db-txt">' + d.surface + '</div></div>' +
+        '<div class="bp-db"><div class="bp-db-lbl">Job this serves</div><div class="bp-db-txt">' + d.jtbd + '</div></div>' +
+      '</div>' +
+      (d.openq ? '<div class="bp-warn"><span class="bp-warn-lbl">Open question / gap</span><div class="bp-warn-txt">' + d.openq + '</div></div>' : '');
+  });
+}
+
+// ── DEFINE ──────────────────────────────────────────────
+buildBlueprint('define',
+[
+  {step:'M1',name:'PM initiates spec',trigger:'User action · Slack / Web'},
+  {step:'M2',name:'Sokuvo clarifies scope',trigger:'Auto · Pattern B modifier'},
+  {step:'M3',name:'Draft + evaluator run',trigger:'Auto · generation + scoring', isEval:true},
+  {step:'M4',name:'PM iterates against gaps',trigger:'PM responds to evaluator'},
+  {step:'M5',name:'Threshold gate',trigger:'Auto · score vs threshold', isEval:true},
+  {step:'M6',name:'PM publishes to Confluence',trigger:'PM explicit approval'},
+  {step:'M7',name:'Eng Lead: feasibility',trigger:'Eng Lead receives notification'},
+  {step:'M8',name:'Eng Lead: annotate spec',trigger:'Eng Lead reviews + edits'},
+  {step:'M9',name:'Dev: reads + flags',trigger:'Dev receives notification'},
+  {step:'M10',name:'Tech approval gate',trigger:'Eng Lead explicit sign-off'},
+  {step:'M11',name:'PM notifies team',trigger:'Both gates cleared'},
+],
+{
+  m1:{pm:{txt:'Describes need in natural language — vague is fine',tag:'tag-r'}},
+  m2:{pm:{txt:'Answers one clarifying question at a time',tag:'tag-r'}},
+  m3:{pm:{txt:'Watches draft stream + evaluator score appear',tag:'tag-e'}},
+  m4:{pm:{txt:'Resolves evaluator gaps — score updates in real time',tag:'tag-r'}},
+  m5:{},
+  m6:{pm:{txt:'Approves Confluence write → spec published with score metadata',tag:'tag-g'}},
+  m7:{lead:{txt:'Reviews spec with score — calibrates annotation depth',tag:'tag-r'}},
+  m8:{lead:{txt:'Adds API contracts, risk flags, alternative approaches',tag:'tag-r'}},
+  m9:{dev:{txt:'Reads domain-filtered spec summary — flags technical gaps',tag:'tag-r'}},
+  m10:{lead:{txt:'Technical sign-off — or returns with section-level feedback',tag:'tag-g'}},
+  m11:{pm:{txt:'Notifies team — spec approved with score badge',tag:'tag-r'}},
+},
+{
+  m1:'qa_router classifies → write_artifacts_prd · retrieval pulls source docs',
+  m2:'Pattern B modifier — one clarifying question ordered by gap severity',
+  m3:'write_artifacts_prd generates draft · spec_evaluator runs 0–100 in parallel',
+  m4:'Per-gap resolve actions · score updates as gaps close',
+  m5:'Threshold gate check — if below threshold Publish is disabled',
+  m6:'confluence_create · artifact state: pending_approval → published',
+  m7:null,
+  m8:'No confluence_update workflow — Eng Lead edits directly in Confluence',
+  m9:'Domain-filtered notification (gap — no workflow yet)',
+  m10:'No designed surface for Eng Lead approval signal',
+  m11:'Sokuvo drafts notification · PM approves before sending',
+},
+{
+  m1:['slack','web'],m2:['slack','web'],m3:['web','auto'],m4:['web'],
+  m5:['web','auto'],m6:['confluence','slack'],m7:['confluence','slack','web'],
+  m8:['confluence','slack'],m9:['slack'],m10:['slack','web'],m11:['slack'],
+},
+{
+  m3_pm:{title:'PRD draft + spec evaluator running in parallel',isEval:true,what:'PRD streams section by section in the Web editor. The spec evaluator runs simultaneously — PM sees draft and evaluator score arrive together. Sections with thin context are labeled Insufficient source material.',sokuvo:'write_artifacts_prd generates the draft. spec_evaluator runs 0–100 scoring: gap detection, contradiction check, completeness per section. Does not block PM interaction — runs in parallel.',surface:'Web editor: draft in center panel. Evaluator score in right panel.',jtbd:'Know Sokuvo validated the spec before reviewing it.',openq:'Should the evaluator re-run after each PM edit? Continuous re-scoring has cost implications.'},
+  m5_back:{title:'Threshold gate — score blocks or enables PM publish',isEval:true,what:'If score is below threshold, Publish is disabled. PM sees exactly which gaps are blocking — not a generic blocked message.',sokuvo:'Threshold gate enforced by evaluator output. PM can resolve gaps to raise score, or request an override (logged, auditable action).',surface:'Web editor: Publish button disabled with specific message — Score is 68, threshold is 75.',jtbd:'Know the spec meets baseline quality before it enters Plan.',openq:'Three undefined decisions: (1) threshold value, (2) override policy, (3) does threshold vary by project type?'},
+  m10_lead:{title:'Eng Lead technical approval or revision request',what:'Eng Lead makes the technical approval decision. If approved: spec cleared for Plan. If revision: specific feedback tied to specific PRD sections.',sokuvo:'No workflow for the technical approval gesture. Approval happens outside Sokuvo — in Slack or Confluence comments.',surface:'Slack: approval message. Confluence: comment.',jtbd:'Not ship a plan that collapses under technical scrutiny.',openq:'Technical approval has no designed surface. The Define → Plan transition cannot auto-trigger without a detectable approval signal.'},
+}
+);
+
+// ── PLAN ──────────────────────────────────────────────
+buildBlueprint('plan',
+[
+  {step:'M1',name:'Auto-triggered',trigger:'Auto · Define gate closes', isEval:true},
+  {step:'M2',name:'Eng Lead: review breakdown',trigger:'Eng Lead notified'},
+  {step:'M3',name:'Eng Lead: refine + annotate',trigger:'Eng Lead edits'},
+  {step:'M4',name:'Eng Lead: assign tasks',trigger:'Eng Lead assigns'},
+  {step:'M5',name:'Plan evaluator',trigger:'Auto · coverage + tier check', isEval:true},
+  {step:'M6',name:'PM reviews plan',trigger:'PM notified'},
+  {step:'M7',name:'PM approves or revises',trigger:'PM explicit action'},
+  {step:'M8',name:'Dev reviews tasks',trigger:'Dev notified of assignments'},
+  {step:'M9',name:'Dual gate + transition',trigger:'Both approvals required'},
+],
+{
+  m2:{lead:{txt:'Reviews auto-generated task breakdown — spec traceability + model tiers',tag:'tag-r'}},
+  m3:{lead:{txt:'Adds architecture context, adjusts model tiers, sets sequencing',tag:'tag-r'}},
+  m4:{lead:{txt:'Assigns tickets to developers · sets dependency graph',tag:'tag-g'}},
+  m5:{},
+  m6:{pm:{txt:'Reviews spec vs. plan traceability — scope, priority, missing ACs',tag:'tag-r'}},
+  m7:{pm:{txt:'Approves plan or returns to Eng Lead with specific feedback',tag:'tag-g'}},
+  m8:{dev:{txt:'Reviews assigned tickets · asks questions · confirms readiness',tag:'tag-r'}},
+  m9:{lead:{txt:'Technical sign-off on architecture decisions and model tiers',tag:'tag-g'}},
+},
+{
+  m1:'Triggered by Define → Plan event · agent reads full approved spec + annotations',
+  m2:null,
+  m3:'Structured Eng Lead context field per ticket feeds IDE MCP in Build',
+  m4:'jira_update per assignment · dependency graph preserved in Jira',
+  m5:'plan_evaluator: AC coverage + model tier appropriateness + dependency completeness',
+  m6:null,
+  m7:'PM approval triggers batch jira_create · ApprovalGate opens',
+  m8:'deep_research answers task questions · unresolvable routed to Eng Lead',
+  m9:'Same dual-gate gap as Define — Eng Lead approval surface undefined',
+},
+{
+  m1:['auto'],m2:['web','slack'],m3:['web'],m4:['web','jira','slack'],
+  m5:['web','auto'],m6:['web','slack'],m7:['web','jira','slack'],
+  m8:['slack','web','ide'],m9:['web','slack'],
+},
+{
+  m1_back:{title:'Plan stage auto-triggered by Define gate closure',isEval:true,what:'No user action required. When both Define gates clear, Sokuvo reads the full published spec — goals, constraints, ACs, technical annotations, evaluator score — and begins decomposition.',sokuvo:'Triggered by Define → Plan transition event. Reads PRD from Confluence. Pulls Eng Lead annotations. Retrieves architecture context. Begins auto-generating task breakdown.',surface:'Backstage only — no user-facing surface during assembly.',jtbd:'Plan should not start because someone decided to start it — it starts because the gate conditions were met.',openq:'The Define → Plan transition event is undefined. No mechanism exists for Sokuvo to know both gates cleared.'},
+  m5_back:{title:'Plan evaluator — validates decomposition against spec contract',isEval:true,what:'Runs after Eng Lead marks breakdown ready. Checks: every AC maps to at least one ticket, model tier assignments are appropriate, dependencies are complete and non-circular.',sokuvo:'Three checks: (1) spec contract coverage, (2) model tier appropriateness, (3) dependency completeness. Output: three coverage scores + gap list.',surface:'Web dashboard: evaluator results panel.',jtbd:'Catch decomposition gaps before Build — a spec AC with no ticket means a feature will not be built.',openq:'Model tier appropriateness criteria are undefined. No rubric exists for frontier vs. balanced vs. cheap assignment.'},
+  m9_lead:{title:'Eng Lead technical sign-off on plan',what:'Eng Lead reviews the final plan after PM approval and gives technical sign-off — architecture decisions complete, model tiers correct, dependencies sound.',sokuvo:'No workflow for Eng Lead technical approval gesture. Same gap as Define M10.',surface:'Slack: approval message. Web dashboard: no dedicated action exists.',jtbd:'Not ship a plan that collapses technically in the first week of Build.',openq:'Eng Lead approval surface is the most repeated gap across the delivery chain. Appears in Define and Plan consecutively.'},
+}
+);
+
+// ── BUILD ──────────────────────────────────────────────
+buildBlueprint('build',
+[
+  {step:'M1',name:'Context injection',trigger:'Auto · Plan→Build fires'},
+  {step:'M2',name:'Dev implements in IDE',trigger:'Dev opens Cursor'},
+  {step:'M3',name:'Dev escalates blocker',trigger:'Dev flags ambiguity'},
+  {step:'M4',name:'PM / Eng Lead respond',trigger:'Decision routed'},
+  {step:'M5',name:'PR created',trigger:'Dev opens PR'},
+  {step:'M6',name:'Code review — analysis',trigger:'Sokuvo + Eng Lead'},
+  {step:'M7',name:'Code review — post',trigger:'Eng Lead approves'},
+  {step:'M8',name:'Dev addresses feedback',trigger:'Dev receives review'},
+],
+{
+  m1:{dev:{txt:'Receives build-start notification · opens task in Cursor · context waiting',tag:'tag-r'}},
+  m2:{dev:{txt:'Implements with project-aware AI assistance — spec intent, AC, arch decisions',tag:'tag-r'}},
+  m3:{pm:{txt:'Receives product escalation · responds with scoped decision',tag:'tag-g'},lead:{txt:'Receives technical escalation · responds with architecture decision',tag:'tag-g'},dev:{txt:'Flags blocker · escalates from IDE to PM or Eng Lead',tag:'tag-r'}},
+  m4:{pm:{txt:'Decision captured · written to task context and project memory',tag:'tag-g'},lead:{txt:'Decision captured · written to task context and project memory',tag:'tag-g'}},
+  m5:{dev:{txt:'Creates PR — auto-linked to task, spec, and decisions',tag:'tag-r'}},
+  m6:{lead:{txt:'Reviews PR against spec + architecture context (analysis only)',tag:'tag-r'}},
+  m7:{lead:{txt:'Posts review · approves or requests changes with AC-linked feedback',tag:'tag-g'}},
+  m8:{dev:{txt:'Addresses feedback · pushes update · loop closes',tag:'tag-r'}},
+},
+{
+  m1:'Pre-assembles context package: spec, AC, Eng Lead notes, code modules, coding standards',
+  m2:'MCP delivers context to Cursor · deep_research available inline',
+  m3:'Sokuvo classifies escalation (product vs. technical) · routes with context bundle',
+  m4:'Decision written to: task context field, project memory, IDE context package',
+  m5:'GitHub webhook: reads diff → writes AC checklist + decisions to PR description',
+  m6:'code_review initial pass: AC coverage check + architectural pattern check',
+  m7:'Audit trail entry: reviewer, timestamp, ACs verified · project memory updated',
+  m8:'Re-runs automated review on PR update · targeted diff of what changed',
+},
+{
+  m1:['slack','ide','auto'],m2:['ide'],m3:['slack','web'],m4:['slack','web'],
+  m5:['github','jira','slack'],m6:['github','web'],m7:['github','slack','jira'],m8:['ide','github','slack'],
+},
+{
+  m1_back:{title:'Sokuvo assembles IDE context package on Plan→Build transition',what:'Context package assembled: linked spec section, AC, Eng Lead architecture notes, relevant code modules, coding standards, prior PR review feedback for this domain.',sokuvo:'retrieve_project_context pulls all context. Package structured for MCP delivery. Pre-assembled proactively to meet 15s SLA.',surface:'Backstage — context appears in IDE sidebar when developer opens ticket in Cursor.',jtbd:'The developer should not have to ask for context. It should be waiting for them.',openq:'Pre-assembly at transition vs. on-demand. If pre-assembled, context may be stale when developer starts (hours later). If on-demand, 15s SLA is the constraint.'},
+  m5_dev:{title:'Developer creates PR auto-linked to task, spec, and decisions',what:'Developer opens a PR. Sokuvo auto-populates the description from the task context — not a blank template.',sokuvo:'GitHub webhook fires. Sokuvo reads diff and task context, writes: spec section link, AC checklist, Eng Lead architecture notes, key decisions to PR description. Bidirectional links to Jira.',surface:'GitHub: PR with auto-populated description. Jira: ticket updated with PR link. Slack: notification to Eng Lead.',jtbd:'Create PRs that give the Eng Lead everything they need to review without asking.',openq:null},
+  m6_lead:{title:'Eng Lead reviews PR — analysis step (separate from posting)',what:'Eng Lead receives notification with PR + Sokuvo context. Reviews against spec AC and architecture decisions. This is the analysis step — does not post comments yet.',sokuvo:'Code review is two discrete steps. Sokuvo initial automated review already posted as a review summary labeled Sokuvo initial review.',surface:'GitHub: PR with Sokuvo-generated description and initial review. Web dashboard: spec-to-diff traceability.',jtbd:'Review against spec and architecture decisions — not just code style.',openq:'GitHub PR UX does not enforce the two-step separation. How does Sokuvo surface this to the Eng Lead without adding friction?'},
+}
+);
+
+// ── TEST ──────────────────────────────────────────────
+buildBlueprint('test',
+[
+  {step:'M1',name:'Test suite generated',trigger:'Auto · Build→Test fires', isEval:true},
+  {step:'M2',name:'Dev reviews + fixes',trigger:'Dev sees test results'},
+  {step:'M3',name:'Pass 1 — structural',trigger:'Auto · cheap model', isEval:true},
+  {step:'M4',name:'Pass 2 — functional',trigger:'Auto · balanced model', isEval:true},
+  {step:'M5',name:'Pass 3 — adversarial',trigger:'Conditional · frontier', isEval:true},
+  {step:'M6',name:'Eng Lead reviews results',trigger:'Consolidated report'},
+  {step:'M7',name:'Edge case decisions',trigger:'Eng Lead escalates to PM'},
+  {step:'M8',name:'PM reads coverage',trigger:'PM-facing AC report'},
+  {step:'M9',name:'Test gate',trigger:'All passes clear + sign-offs'},
+],
+{
+  m1:{dev:{txt:'Reviews generated test suite — checks AC mapping accuracy',tag:'tag-r'}},
+  m2:{dev:{txt:'Fixes failing tests · flags incorrect generated tests',tag:'tag-r'}},
+  m3:{lead:{txt:'Reviews Pass 1 structural results · approves Pass 2 or sends back',tag:'tag-r'}},
+  m4:{dev:{txt:'Reviews Pass 2 classified failures · fixes implementation or test gaps',tag:'tag-r'}},
+  m5:{lead:{txt:'Decides whether to trigger Pass 3 adversarial review',tag:'tag-g'}},
+  m6:{lead:{txt:'Reviews consolidated multi-pass report · classifies findings',tag:'tag-r'}},
+  m7:{pm:{txt:'Decides on unresolvable edge cases — change AC, accept, or backlog',tag:'tag-g'},lead:{txt:'Escalates unresolvable edge cases to PM with structured context',tag:'tag-r'}},
+  m8:{pm:{txt:'Reviews AC coverage report — plain-language pass/fail per criterion',tag:'tag-r'}},
+  m9:{lead:{txt:'Technical sign-off on test results — deliberate quality decision',tag:'tag-g'}},
+},
+{
+  m1:'Agent generates test cases from every spec AC · writes test files to GitHub test branch',
+  m2:'Sokuvo maps test failures to ACs · surfaces spec context per failure in IDE sidebar',
+  m3:'Pass 1 evaluator: structural coverage score + gap list · structural only, does not run tests',
+  m4:'Pass 2 evaluator: runs full test suite · failure-type classification per failing test',
+  m5:'Pass 3 evaluator: adversarial · different model family · samples based on risk score',
+  m6:null,
+  m7:'Decision captured · written to spec AC, project memory, audit trail',
+  m8:'PM coverage report generated — AC checklist with plain-language failure descriptions',
+  m9:'Six-condition gate check · fires Test → Review if all conditions met',
+},
+{
+  m1:['slack','ide','github','auto'],m2:['ide','github'],m3:['slack','web','auto'],
+  m4:['slack','web','github','auto'],m5:['web','slack','auto'],m6:['web','slack'],
+  m7:['slack','web'],m8:['slack','web'],m9:['web','slack','auto'],
+},
+{
+  m1_back:{title:'Agent generates test suite from spec ACs',isEval:true,what:'Agent reads every AC and generates a corresponding test. Tests cover happy paths, error states, edge cases, and regression coverage for prior bugs.',sokuvo:'Agent reads spec AC from Confluence. For each AC: generates test cases, writes test code matched to project testing framework, links each test back to its AC. Tests committed to test branch in GitHub.',surface:'Backstage — GitHub test branch created.',jtbd:'Tests should come from acceptance criteria, not from the developer\'s interpretation.',openq:'Framework detection: if the project uses multiple frameworks (Jest + Cypress), the agent must select the right one per test type. Accuracy is unvalidated.'},
+  m3_back:{title:'Pass 1 — structural checks (cheap model)',isEval:true,what:'Checks test file structure, not test execution. Validates: every AC has at least one test, every test has an AC mapping, no orphaned tests, file structure matches project conventions.',sokuvo:'Output: structural coverage score (0–100) and structural gap list. Feeds into Pass 2 if structural checks pass.',surface:'Backstage — evaluator on GitHub test branch.',jtbd:'Catch structural problems cheaply before running expensive functional evaluation.',openq:'What structural gap severity triggers a block on Pass 2? Orphaned test vs. missing AC — different severities. Threshold undefined.'},
+  m4_back:{title:'Pass 2 — functional correctness (balanced model)',isEval:true,what:'Executes the test suite and evaluates functional correctness. Checks for silent passes — tests that pass but do not actually validate the AC.',sokuvo:'Runs full test suite. For each passing test, verifies the assertion actually validates the AC. Classifies each failure as: implementation gap, test error, or ambiguous.',surface:'Backstage — runs in CI. Results feed into Pass 3 trigger decision.',jtbd:'Surface implementation gaps before Review. A silent pass is worse than a visible failure.',openq:'Detecting silent passes requires the evaluator to reason about what the assertion is verifying. False negatives are the highest-risk failure mode of this pass.'},
+  m5_back:{title:'Pass 3 — adversarial review (frontier model, conditional)',isEval:true,what:'Probes for edge cases the test suite did not cover and silent failures. Uses a different model family to reduce sycophantic confirmation.',sokuvo:'Samples outputs based on risk score. Runs adversarial prompts against the implementation. Flags divergences between test behavior and spec intent.',surface:'Backstage — frontier model run. Results delivered to Eng Lead.',jtbd:'Catch silent failures — behavior that passes every test but violates spec intent.',openq:'Three undefined trigger conditions: what Pass 2 failure count/type triggers automatic Pass 3? Can Eng Lead trigger manually? What is the cost threshold?'},
+}
+);
+
+// ── REVIEW ──────────────────────────────────────────────
+buildBlueprint('review',
+[
+  {step:'M1',name:'Review summary assembled',trigger:'Auto · Test→Review fires', isEval:true},
+  {step:'M2',name:'Trust classification runs',trigger:'Auto · scores all outputs', isEval:true},
+  {step:'M3',name:'PM reviews AC checklist',trigger:'PM receives review package'},
+  {step:'M4',name:'Eng Lead reviews tech report',trigger:'Eng Lead receives package'},
+  {step:'M5',name:'Rework requested',trigger:'PM or Eng Lead flags issues'},
+  {step:'M6',name:'Dev addresses rework',trigger:'Dev receives rework requests'},
+  {step:'M7',name:'Tech docs generated',trigger:'Auto · from context graph'},
+  {step:'M8',name:'Release notes drafted',trigger:'PM requested'},
+  {step:'M9',name:'Review gate',trigger:'Both sign-offs required'},
+],
+{
+  m3:{pm:{txt:'Reviews AC checklist with pass/fail · traceability links to PRs',tag:'tag-r'}},
+  m4:{lead:{txt:'Reviews consolidated tech report — PRs, coverage, CI/CD, trust flags',tag:'tag-r'}},
+  m5:{pm:{txt:'Requests rework on failing or misaligned ACs',tag:'tag-g'},lead:{txt:'Requests rework on security, performance, or architectural concerns',tag:'tag-g'}},
+  m6:{dev:{txt:'Addresses rework · creates follow-up PRs · closes the loop',tag:'tag-r'}},
+  m7:{lead:{txt:'Reviews and refines auto-generated technical documentation',tag:'tag-r'}},
+  m8:{pm:{txt:'Edits and approves auto-drafted release notes',tag:'tag-r'}},
+  m9:{pm:{txt:'Product sign-off — explicit approval on release quality',tag:'tag-g'},lead:{txt:'Technical sign-off — code quality, docs, CI/CD all green',tag:'tag-g'}},
+},
+{
+  m1:'review_summary: maps every merged PR to spec AC · generates annotated diff + traceability',
+  m2:'trust_classifier: 4-dimension scoring (cost-of-error, reversibility, frequency, verifiability) · routes to review path',
+  m3:null,m4:null,
+  m5:'Rework requests logged to audit trail · routed with full context bundle',
+  m6:'Re-runs automated review on follow-up PRs · targeted AC pass/fail update',
+  m7:'write_documentation: reads architecture decisions from project memory → ADRs + module docs → Confluence',
+  m8:'Draft release notes from accepted ACs, shipped PRs, decisions · Web editor',
+  m9:'Six-condition gate check · both sign-offs required · Review → Ship fires',
+},
+{
+  m1:['auto'],m2:['auto'],m3:['web','slack'],m4:['web','github','slack'],
+  m5:['web','github','slack'],m6:['ide','github','slack'],m7:['confluence','slack'],
+  m8:['web','slack'],m9:['web','slack','auto'],
+},
+{
+  m1_back:{title:'Sokuvo assembles review summary mapped to spec ACs',isEval:true,what:'Auto-assembles: review summary mapping every merged PR to its spec AC, annotated diff showing what changed vs. what the spec required, traceability links from code changes back to originating spec sections.',sokuvo:'review_summary workflow: reads all merged PRs, maps each diff to task context, maps each task to spec AC, produces structured review summary.',surface:'Backstage — PM and Eng Lead receive separate review packages once complete.',jtbd:'The review should start from a structured mapping, not from manually cross-referencing Confluence and GitHub.',openq:'If a PR implements an AC incorrectly but passes tests, the annotated diff may not surface the mismatch. Trust classification is the primary detection mechanism.'},
+  m2_back:{title:'Trust classification evaluator scores every output',isEval:true,what:'Scores each output across four dimensions: cost-of-error, reversibility, frequency, verifiability. High-risk items flagged for mandatory human review. Low-risk items may self-approve.',sokuvo:'trust_classifier runs four-dimension scoring per output. Results drive routing — which outputs reach PM, which reach Eng Lead, which self-approve.',surface:'Backstage — routing output determines what each actor sees in M3 and M4.',jtbd:'Review effort proportional to actual risk — not uniform across everything.',openq:'Trust classification thresholds (what score triggers mandatory human review) are defined architecturally but not yet calibrated against real project data.'},
+  m9_lead:{title:'Eng Lead technical sign-off on code quality and documentation',what:'Eng Lead explicitly approves the review: all technical concerns resolved, CI/CD green, documentation complete, no unreviewed high-risk items.',sokuvo:'Sign-off recorded. Audit trail: who, when, which PRs in scope, CI/CD status at time, trust classification items present.',surface:'Web dashboard: Eng Lead sign-off action in review gate panel.',jtbd:'Technical readiness is a deliberate decision — not a checkbox because the PM already approved.',openq:'Eng Lead approval surface undefined — fifth consecutive stage with this same structural gap.'},
+}
+);
+
+// ── SHIP ──────────────────────────────────────────────
+buildBlueprint('ship',
+[
+  {step:'M1',name:'Final eval gate check',trigger:'Auto · Review→Ship fires', isEval:true},
+  {step:'M2',name:'Changelog generated',trigger:'Auto · from all stage artifacts'},
+  {step:'M3',name:'PR prepared',trigger:'Auto · merge PR created'},
+  {step:'M4',name:'Eng Lead reviews',trigger:'Eng Lead receives Ship package'},
+  {step:'M5',name:'PM reviews summary',trigger:'PM receives deploy package'},
+  {step:'M6',name:'PM approves deploy',trigger:'PM explicit sign-off'},
+  {step:'M7',name:'Deploy + auto-actions',trigger:'Auto · on PM approval'},
+  {step:'M8',name:'Dev receives closure',trigger:'Auto · on deploy complete'},
+  {step:'M9',name:'Project archived',trigger:'Auto · audit trail sealed'},
+],
+{
+  m4:{lead:{txt:'Reviews changelog accuracy and merge PR description',tag:'tag-r'}},
+  m5:{pm:{txt:'Reviews Ship summary — what shipped, out-of-scope, what comes next',tag:'tag-r'}},
+  m6:{pm:{txt:'Approves deploy — explicit final gate action in Web dashboard',tag:'tag-g'}},
+  m8:{dev:{txt:'Receives closure signal — work shipped, tickets closed, contribution visible',tag:'tag-r'}},
+},
+{
+  m1:'Final eval: all prior gates passed · audit trail complete · no open blockers · all artifacts present',
+  m2:'changelog_generator: reads accepted ACs + merged PRs + Test decisions → technical + customer-facing versions',
+  m3:'create_pull_request (planned): reads feature branch · writes description from project context',
+  m4:null,m5:null,m6:null,
+  m7:'Cascade: deploy pipeline · jira_update batch (all tickets → Done) · developer notifications · audit trail entry',
+  m8:null,
+  m9:'archive_project: seals audit trail · preserves context graph for future retrieval',
+},
+{
+  m1:['auto'],m2:['confluence','auto'],m3:['github','auto'],m4:['confluence','github','web','slack'],
+  m5:['web','slack'],m6:['web'],m7:['jira','slack','auto'],m8:['slack'],m9:['auto'],
+},
+{
+  m1_back:{title:'Final evaluator gate check — all prior gates must have passed',isEval:true,what:'Checks: all stage gates passed, audit trail complete with no gaps, no open blockers in any stage, all required artifacts present (changelog, PR, release notes, docs).',sokuvo:'final_eval_checker reads all gate pass records, audit trail completeness, open blocker count, and artifact inventory. If any condition fails, Ship is blocked with a specific reason.',surface:'Backstage — PM and Eng Lead receive specific blocker notification if blocked.',jtbd:'Ship should not start if any prior stage left an unresolved condition.',openq:'If audit trail has an incomplete entry from Build (a write action with no audit record), does Ship block automatically or does PM decide to override? Override policy at Ship is undefined.'},
+  m2_back:{title:'Agent generates changelog from all stage artifacts',what:'Compiles from: accepted ACs from Define, architectural decisions from Build, edge case decisions from Test, approved release notes from Review. Produces two versions: technical and customer-facing.',sokuvo:'changelog_generator reads project memory. Published to Confluence as a draft — not final until Eng Lead approves.',surface:'Backstage — Confluence draft created.',jtbd:'A changelog that reflects what was actually decided and built — not written from memory.',openq:'Changelog quality depends on Build stage decision capture. Decisions made outside Sokuvo (Slack DMs, verbal) are not in the changelog.'},
+  m7_back:{title:'Deploy executes — Jira auto-transitions, cascade notifications fire',what:'On PM approval: deployment pipeline fires, all Jira tickets transition to Done, developer closure notifications sent, audit trail deploy entry written.',sokuvo:'Cascade: (1) deploy pipeline trigger (planned), (2) jira_update batch, (3) per-developer notification, (4) Eng Lead deploy confirmation, (5) audit trail entry.',surface:'Backstage — Jira API, deployment system, Slack notifications.',jtbd:'Closure should be automatic and complete — every ticket closed, every developer notified.',openq:'Deployment pipeline trigger depends on CI/CD integration not yet built in V1. Until built, PM approval clears the Sokuvo gate but does not trigger actual deploy.'},
+  m9_back:{title:'Project archived — audit trail sealed, context preserved',what:'Project marked archived. Audit trail sealed (immutable). Context graph preserved in project memory for future queries.',sokuvo:'archive_project: marks archived, seals audit trail, preserves context graph, creates final project record linking all artifacts.',surface:'Backstage — accessible via Web dashboard admin panel.',jtbd:'Leave the project in a state the next team can understand without talking to anyone who worked on it.',openq:'Relevance filtering for archived project context in future queries is undefined.'},
+}
+);
+
+
+</script>
+</body>
+</html>
