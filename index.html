@@ -369,14 +369,14 @@ p:last-child{margin-bottom:0}
   <div class="section-title">What users are<br>trying to accomplish</div>
   <p class="section-intro">JTBD maps motivation across six stages and three roles. Four layers per job: functional (the task), emotional (the state they want to reach or avoid), social (how they want to be perceived), and continuity (what they need to enable the next person in the chain).</p>
   <div class="section-connector"><div class="connector-arrow">&rarr;</div><div class="connector-text">These jobs are the <strong>ground truth</strong> for all interaction design decisions. Every pattern in the conversation map traces back to a job defined here. Stages marked <span style="color:var(--teal)">&#10022;</span> are new in V2.</div></div>
-  <div class="stage-tabs" id="jtbd-tabs"><button class="stage-tab new-stage active" onclick="jtbdNav(this)">Define ✦</button>
-<button class="stage-tab" onclick="jtbdNav(this)">Plan</button>
-<button class="stage-tab" onclick="jtbdNav(this)">Build</button>
-<button class="stage-tab new-stage" onclick="jtbdNav(this)">Test ✦</button>
-<button class="stage-tab" onclick="jtbdNav(this)">Review</button>
-<button class="stage-tab new-stage" onclick="jtbdNav(this)">Ship ✦</button>
+  <div class="stage-tabs" id="jtbd-tabs"><button class="stage-tab new-stage active" data-stage="define" onclick="jtbdNav(this)">Define ✦</button>
+<button class="stage-tab" data-stage="plan" onclick="jtbdNav(this)">Plan</button>
+<button class="stage-tab" data-stage="build" onclick="jtbdNav(this)">Build</button>
+<button class="stage-tab new-stage" data-stage="test" onclick="jtbdNav(this)">Test ✦</button>
+<button class="stage-tab" data-stage="review" onclick="jtbdNav(this)">Review</button>
+<button class="stage-tab new-stage" data-stage="ship" onclick="jtbdNav(this)">Ship ✦</button>
 </div>
-<div id="jtbd-cards"><div class="jtbd-stage-group" style="display:block"><div class="job-card is-new">
+<div id="jtbd-cards"><div class="jtbd-stage-group" data-stage="define" style="display:block"><div class="job-card is-new">
   <div class="job-header is-new">
     <div>
       <div class="job-stage">Define stage <span class="new-pill">new V2</span></div>
@@ -431,7 +431,7 @@ p:last-child{margin-bottom:0}
     <div class="tension-box"><span class="tension-lbl">Design tension</span>Domain-filtered spec delivery is a gap. The evaluator score cannot be delivered if the notification system does not exist.</div>
   </div>
 </div></div>
-<div class="jtbd-stage-group" style="display:none"><div class="job-card">
+<div class="jtbd-stage-group" data-stage="plan" style="display:none"><div class="job-card">
   <div class="job-header">
     <div>
       <div class="job-stage">Plan stage</div>
@@ -486,7 +486,7 @@ p:last-child{margin-bottom:0}
     <div class="tension-box"><span class="tension-lbl">Design tension</span>The ready-to-build confirmation is a named intent but has no workflow or surface.</div>
   </div>
 </div></div>
-<div class="jtbd-stage-group" style="display:none"><div class="job-card">
+<div class="jtbd-stage-group" data-stage="build" style="display:none"><div class="job-card">
   <div class="job-header">
     <div>
       <div class="job-stage">Build stage</div>
@@ -541,7 +541,7 @@ p:last-child{margin-bottom:0}
     <div class="tension-box"><span class="tension-lbl">Design tension</span>The failure mode — missing or stale context — is what needs visible design, not the happy path.</div>
   </div>
 </div></div>
-<div class="jtbd-stage-group" style="display:none"><div class="job-card is-new">
+<div class="jtbd-stage-group" data-stage="test" style="display:none"><div class="job-card is-new">
   <div class="job-header is-new">
     <div>
       <div class="job-stage">Test stage <span class="new-pill">new V2</span></div>
@@ -596,7 +596,7 @@ p:last-child{margin-bottom:0}
     <div class="tension-box"><span class="tension-lbl">Design tension</span>If the developer disagrees with a generated test, what is the workflow for rejecting or modifying it? This is undefined.</div>
   </div>
 </div></div>
-<div class="jtbd-stage-group" style="display:none"><div class="job-card">
+<div class="jtbd-stage-group" data-stage="review" style="display:none"><div class="job-card">
   <div class="job-header">
     <div>
       <div class="job-stage">Review stage</div>
@@ -651,7 +651,7 @@ p:last-child{margin-bottom:0}
     <div class="tension-box"><span class="tension-lbl">Design tension</span>The developer done signal currently comes from GitHub, Jira, and Slack separately — it should arrive in one place.</div>
   </div>
 </div></div>
-<div class="jtbd-stage-group" style="display:none"><div class="job-card is-new">
+<div class="jtbd-stage-group" data-stage="ship" style="display:none"><div class="job-card is-new">
   <div class="job-header is-new">
     <div>
       <div class="job-stage">Ship stage <span class="new-pill">new V2</span></div>
